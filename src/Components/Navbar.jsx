@@ -8,7 +8,9 @@ import { NavLink } from "react-router-dom";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const toggleMenu = () => setIsOpen(!isOpen);
+  const toggleMenu = () => {
+    setIsOpen((prev) => !prev);
+  };
 
   return (
     <>
@@ -55,7 +57,7 @@ const Navbar = () => {
         </div>
 
         <div className="md:hidden">
-          <button onClick={toggleMenu}>
+          <button className="cursor-pointer" onClick={toggleMenu}>
             {isOpen ? <FiX size={24} /> : <FiMenu size={24} />}
           </button>
         </div>
