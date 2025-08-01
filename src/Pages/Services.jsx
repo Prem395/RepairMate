@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Navbar from "../Components/Navbar";
 import { SERVICES } from "../data/servicesData";
 
+
 const Services = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-black to-indigo-900 text-white pb-8">
