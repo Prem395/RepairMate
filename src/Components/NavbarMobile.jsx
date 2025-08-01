@@ -25,13 +25,6 @@ const NavbarMobile = ({ onClose }) => {
         >
           Services
         </Link>
-        <Link
-          to="/contact"
-          onClick={onClose}
-          className="hover:text-blue-400 transition"
-        >
-          Contact
-        </Link>
       </div>
     </>
   );
