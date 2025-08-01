@@ -76,7 +76,7 @@ const LeftSection = () => {
         className="relative w-full max-w-full sm:max-w-[620px] overflow-visible"
       >
         <form onSubmit={onSubmit} className="w-full mt-4">
-          <div className="flex items-center border-2 border-white/10 h-[60px] w-[580px] bg-white/10 backdrop-blur-lg rounded-lg px-4 sm:px-6 shadow-lg text-white">
+          <div className="flex items-center border-2 border-white/10 h-[60px] w-full sm:w-[580px] bg-white/10 backdrop-blur-lg rounded-lg px-4 sm:px-6 shadow-lg text-white">
             <CiSearch size={22} />
             <input
               type="text"
@@ -102,7 +102,7 @@ const LeftSection = () => {
           <div
             id="search-results"
             key={query + results.length} // ✅ dynamic key triggers re-render
-            className="absolute z-50 mt-2 w-[580px] max-w-full sm:max-w-[620px] bg-white/10 backdrop-blur-xl border border-white/10 rounded-lg shadow-2xl max-h-60 overflow-y-auto animate-fadeIn"
+            className="absolute z-50 mt-2 sm:w-[580px] max-w-full sm:max-w-[620px] bg-white/10 backdrop-blur-xl border border-white/10 rounded-lg shadow-2xl max-h-60 overflow-y-auto animate-fadeIn"
           >
             {query && results.length === 0 && (
               <div className="p-4 text-sm text-white/80">
@@ -148,7 +148,7 @@ const LeftSection = () => {
       )}
 
       {/* CTAs */}
-      <div className="flex gap-4 ">
+      <div className="flex gap-4 w-full justify-center sm:justify-start ">
         <button
           onClick={FormOpenToggle}
           className="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-xl text-white shadow-lg"
