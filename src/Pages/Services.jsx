@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import Navbar from "../Components/Navbar";
-import { SERVICES } from "../data/servicesData";
+import { SERVICES } from "../data/servicesData.js";
 
 
 const Services = () => {
