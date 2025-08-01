@@ -1,6 +1,6 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { IoIosArrowBack } from "react-icons/io";
-import { SERVICES } from "../data/ServicesData";
+import { SERVICES } from "../data/servicesData";
 
 const ServiceDetails = () => {
   const navigate = useNavigate();

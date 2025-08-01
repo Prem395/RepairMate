@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import BookRepairForm from "../BookRepairForm";
 import { Navigate, useNavigate } from "react-router-dom";
-import { SERVICES } from "../../data/ServicesData";
+import { SERVICES } from "../../data/servicesData";
 
 const LeftSection = () => {
   const [openResults, setOpenResults] = useState(false);
