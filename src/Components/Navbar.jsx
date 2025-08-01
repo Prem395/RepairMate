@@ -61,7 +61,11 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {isOpen && <NavbarMobile onclose={() => setIsOpen(false)} />}
+      {isOpen && (
+        <div className="fixed top-0 left-0 w-full h-full z-[999]">
+          <NavbarMobile onClose={() => setIsOpen(false)} />
+        </div>
+      )}
     </>
   );
 };
