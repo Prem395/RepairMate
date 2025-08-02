@@ -4,7 +4,7 @@ import { FiX } from "react-icons/fi";
 const NavbarMobile = ({ onClose }) => {
   return (
     <div className="fixed inset-0 bg-black/40 z-[999] flex justify-end">
-      <div className="w-[250px] h-full bg-[#0f172a] text-white px-6 py-8 relative shadow-xl">
+      <div className="w-[250px] h-full border-2 border-white/5 bg-white/10 backdrop-blur-lg text-white px-6 py-8 relative shadow-xl">
         {/* Close button */}
         <button
           onClick={onClose}
