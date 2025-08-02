@@ -1,210 +1,76 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
+// eslint-disable-next-line no-unused-vars
+import { motion } from "framer-motion";
+import { FiX } from "react-icons/fi";
 
 const BookRepairForm = ({ setIsFormOpen }) => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [deviceType, setDeviceType] = useState("");
-  const [contactNumber, setContactNumber] = useState("");
-  const [issueDesc, setIssueDesc] = useState("");
-  const [emailError, setEmailError] = useState(null);
-  const [numberError, setNumberError] = useState(null);
-
   const modalRef = useRef();
 
   useEffect(() => {
-    const handler = (e) => {
+    const handleClickOutside = (e) => {
       if (modalRef.current && !modalRef.current.contains(e.target)) {
         setIsFormOpen(false);
       }
     };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [setIsFormOpen]);
 
-  const submitHandler = (e) => {
-    e.preventDefault();
-
-    const phoneRegex = /^[6-9]\d{9}$/;
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-    let isValid = true;
-    setEmailError(null);
-    setNumberError(null);
-
-    if (!phoneRegex.test(contactNumber)) {
-      setNumberError("Please enter a valid 10-digit number starting with 6-9");
-      isValid = false;
-    }
-
-    if (!emailRegex.test(email)) {
-      setEmailError("Please enter a valid email address");
-      isValid = false;
-    }
-
-    if (!isValid) return;
-
-    console.log({ name, email, deviceType, issueDesc, contactNumber });
-
-    setName("");
-    setEmail("");
-    setDeviceType("");
-    setContactNumber("");
-    setIssueDesc("");
-
-    alert("Form submitted successfully!");
-  };
-
   return (
-    <div className="flex justify-center items-center min-h-screen transition-all">
-      <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex justify-center items-center z-50 transition-opacity duration-300">
-        <form
-          ref={modalRef}
-          onSubmit={submitHandler}
-          className="w-full max-w-xl border-2 border-white/10 bg-white/10 backdrop-blur-lg rounded-xl p-8 shadow-lg space-y-6 animate-fadeIn transition-all duration-200"
+    <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/70 backdrop-blur-sm px-4">
+      <motion.div
+        ref={modalRef}
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+        className="relative w-full max-w-xl rounded-3xl p-8 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-lg border border-white/20 shadow-2xl text-white"
+      >
+        <button
+          onClick={() => setIsFormOpen(false)}
+          className="absolute top-5 right-5 text-white hover:text-red-500 transition"
         >
-          <h2 className="text-2xl font-bold text-white text-center">
-            Book a Repair
-          </h2>
+          <FiX size={26} />
+        </button>
 
-          {/* Name */}
-          <div className="relative">
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              id="name"
+        <h2 className="text-3xl font-bold text-center mb-8 tracking-wide">
+          Book a Repair
+        </h2>
+
+        <form className="space-y-6">
+          {["Full Name", "Email Address", "Device Type"].map((label, i) => (
+            <div key={i} className="relative group">
+              <input
+                type="text"
+                required
+                placeholder=""
+                className="w-full bg-transparent border border-white/30 rounded-xl px-4 pt-6 pb-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-transparent transition"
+              />
+              <label className="absolute left-4 top-3 text-sm text-white/60 transition-all group-focus-within:top-1 group-focus-within:text-xs group-focus-within:text-blue-400">
+                {label}
+              </label>
+            </div>
+          ))}
+
+          <div className="relative group">
+            <textarea
+              rows="4"
               required
-              className="peer w-full bg-transparent border border-white/20 text-white rounded-md px-4 pt-6 pb-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-              placeholder=" "
+              className="w-full bg-transparent border border-white/30 rounded-xl px-4 pt-6 pb-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-transparent transition"
+              placeholder=""
             />
-            <label
-              htmlFor="name"
-              className="absolute left-4 top-2 text-sm text-white/70 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-white/40 peer-focus:top-2 peer-focus:text-sm peer-focus:text-blue-400"
-            >
-              Name
+            <label className="absolute left-4 top-3 text-sm text-white/60 transition-all group-focus-within:top-1 group-focus-within:text-xs group-focus-within:text-blue-400">
+              Describe the Issue
             </label>
           </div>
 
-          {/* Email */}
-          <div className="relative">
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                setEmailError(null);
-              }}
-              id="email"
-              required
-              aria-invalid={!!emailError}
-              aria-describedby="email-error"
-              className={`peer w-full bg-transparent border ${
-                emailError ? "border-red-700" : "border-white/20"
-              } text-white rounded-md px-4 pt-6 pb-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500`}
-              placeholder=" "
-            />
-            <label
-              htmlFor="email"
-              className="absolute left-4 top-2 text-sm text-white/70 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-white/40 peer-focus:top-2 peer-focus:text-sm peer-focus:text-blue-400"
-            >
-              Email
-            </label>
-            {emailError && (
-              <p
-                id="email-error"
-                className="text-xs text-red-400 font-medium mt-1 ml-2"
-              >
-                {emailError}
-              </p>
-            )}
-          </div>
-
-          {/* Contact Number */}
-          <div className="relative">
-            <input
-              type="text"
-              inputMode="numeric"
-              pattern="[0-9]*"
-              maxLength="10"
-              value={contactNumber}
-              onChange={(e) => {
-                setContactNumber(e.target.value.replace(/\D/g, ""));
-                setNumberError(null);
-              }}
-              id="contact"
-              required
-              aria-invalid={!!numberError}
-              aria-describedby="number-error"
-              className={`peer w-full bg-transparent border ${
-                numberError ? "border-red-700" : "border-white/20"
-              } text-white rounded-md px-4 pt-6 pb-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500`}
-              placeholder=" "
-            />
-            <label
-              htmlFor="contact"
-              className="absolute left-4 top-2 text-sm text-white/70 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-white/40 peer-focus:top-2 peer-focus:text-sm peer-focus:text-blue-400"
-            >
-              Contact Number
-            </label>
-            {numberError && (
-              <p
-                id="number-error"
-                className="text-xs text-red-400 font-medium mt-1 ml-2"
-              >
-                {numberError}
-              </p>
-            )}
-          </div>
-
-          {/* Device Type */}
-          <div className="relative">
-            <input
-              type="text"
-              value={deviceType}
-              onChange={(e) => setDeviceType(e.target.value)}
-              id="device"
-              required
-              className="peer w-full bg-transparent border border-white/20 text-white rounded-md px-4 pt-6 pb-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-              placeholder=" "
-            />
-            <label
-              htmlFor="device"
-              className="absolute left-4 top-2 text-sm text-white/70 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-white/40 peer-focus:top-2 peer-focus:text-sm peer-focus:text-blue-400"
-            >
-              Device Type
-            </label>
-          </div>
-
-          {/* Issue Description */}
-          <div className="relative">
-            <input
-              type="text"
-              value={issueDesc}
-              onChange={(e) => setIssueDesc(e.target.value)}
-              id="issue"
-              required
-              className="peer w-full bg-transparent border border-white/20 text-white rounded-md px-4 pt-6 pb-2 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-              placeholder=" "
-            />
-            <label
-              htmlFor="issue"
-              className="absolute left-4 top-2 text-sm text-white/70 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-white/40 peer-focus:top-2 peer-focus:text-sm peer-focus:text-blue-400"
-            >
-              Issue Description
-            </label>
-          </div>
-
-          {/* Submit Button */}
-          <div className="text-center">
-            <button
-              type="submit"
-              className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition duration-200"
-            >
-              Submit
-            </button>
-          </div>
+          <button
+            type="submit"
+            className="w-full py-3 mt-4 bg-blue-600 hover:bg-blue-700 rounded-xl font-semibold tracking-wide shadow-lg transition"
+          >
+            Submit Request
+          </button>
         </form>
-      </div>
+      </motion.div>
     </div>
   );
 };
