@@ -32,15 +32,15 @@ const Navbar = () => {
       <div className="pointer-events-none fixed inset-x-0 top-0 z-50 flex justify-center px-3 pb-2 pt-4">
         <nav
           data-main-navbar
-          className="pointer-events-auto flex min-h-[70px] w-[92%] max-w-[1200px] items-center justify-between gap-6 rounded-full border border-white/10 bg-white/10 px-6 py-3 text-white shadow-[0_18px_50px_rgba(0,0,0,0.28)] backdrop-blur-lg"
+          className="pointer-events-auto flex min-h-[64px] w-[92%] max-w-[1200px] items-center justify-between gap-3 rounded-full border border-white/10 bg-white/10 px-4 py-2.5 text-white shadow-[0_18px_50px_rgba(0,0,0,0.28)] backdrop-blur-lg sm:min-h-[70px] sm:gap-6 sm:px-6 sm:py-3"
         >
           <button
             type="button"
             onClick={() => navigate("/")}
-            className="flex items-center gap-3"
+            className="flex items-center gap-2 sm:gap-3"
           >
-            <FcElectricalSensor size={45} className="mr-[-10px]" />
-            <h1 id="logo-text" className="text-2xl font-semibold">
+            <FcElectricalSensor size={38} className="mr-[-8px] sm:mr-[-10px] sm:text-[45px]" />
+            <h1 id="logo-text" className="text-[1.95rem] font-semibold leading-none sm:text-2xl">
               Repair<span className="text-blue-400">Mate</span>
             </h1>
           </button>
@@ -114,7 +114,7 @@ const Navbar = () => {
 
           <div className="md:hidden">
             <button
-              className="cursor-pointer"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5"
               onClick={toggleMenu}
               aria-label="Toggle navigation menu"
             >

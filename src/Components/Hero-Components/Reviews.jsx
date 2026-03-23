@@ -1,6 +1,5 @@
-/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence, color } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import person1 from "../../assets/Images/person1.png";
 import person2 from "../../assets/Images/person2.png";
 import person3 from "../../assets/Images/person_3.webp";
@@ -41,7 +40,7 @@ const Reviews = () => {
   const review = reviews[current];
 
   return (
-    <div className="w-[400px] p-6 rounded-xl text-white">
+    <div className="w-full p-4 text-white sm:p-6">
       <AnimatePresence mode="wait">
         <motion.div
           key={review.name}
@@ -50,11 +49,11 @@ const Reviews = () => {
           exit={{ opacity: 0, x: -50 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 sm:gap-4">
             <img
               src={review.image}
               alt={review.name}
-              className="w-12 h-12 rounded-full object-cover border border-white/20"
+              className="h-11 w-11 rounded-full border border-white/20 object-cover sm:h-12 sm:w-12"
             />
             <div>
               <h2 className="font-semibold">{review.name}</h2>
@@ -65,7 +64,7 @@ const Reviews = () => {
               </div>
             </div>
           </div>
-          <p className="text-sm mt-2">{review.comment}</p>
+          <p className="mt-3 text-sm leading-6 text-white/85">{review.comment}</p>
         </motion.div>
       </AnimatePresence>
     </div>
