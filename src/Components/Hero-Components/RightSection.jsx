@@ -5,9 +5,9 @@ import Reviews from "./Reviews";
 
 const RightSection = () => {
   return (
-    <div className="w-full lg:w-[420px] flex flex-col gap-4 lg:m-20">
+    <div className="flex w-full max-w-[420px] flex-col gap-4 lg:w-[420px]">
       {/* Features card */}
-      <div className="w-full flex flex-col justify-center items-center border-2 border-white/5 bg-white/10 backdrop-blur-lg rounded-lg py-8 px-6">
+      <div className="flex w-full flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/10 px-6 py-8 backdrop-blur-lg">
         <div className="flex flex-col gap-6 w-full">
           {/* Card 1 */}
           <div className="flex items-center gap-4 border-b border-white/20 pb-4">
@@ -47,7 +47,7 @@ const RightSection = () => {
       </div>
 
       {/* Reviews card */}
-      <div className="w-full min-h-[140px] flex items-center border-2 border-white/5 bg-white/10 backdrop-blur-lg rounded-lg px-6">
+      <div className="flex min-h-[140px] w-full items-center rounded-2xl border border-white/5 bg-white/10 px-6 backdrop-blur-lg">
         <Reviews />
       </div>
     </div>

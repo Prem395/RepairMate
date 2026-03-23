@@ -1,8 +1,13 @@
+@import "locomotive-scroll/dist/locomotive-scroll.css";
 @import url("https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html {
+  scroll-behavior: auto;
+}
 
 * {
   margin: 0;
@@ -12,8 +17,7 @@
   font-family: "Rubik";
 }
 
-#logo-text,
-span {
+#logo-text span {
   font-family: "Goldman";
 }
 

@@ -1,50 +1,52 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-
+import { motion as Motion } from "framer-motion";
 import { CiSearch } from "react-icons/ci";
+import { useNavigate } from "react-router-dom";
 import BookRepairForm from "../BookRepairForm";
-import { Navigate, useNavigate } from "react-router-dom";
 import { SERVICES } from "../../data/servicesData.js";
+import { useAuth } from "../../context/AuthContext";
 
 const LeftSection = () => {
   const [openResults, setOpenResults] = useState(false);
   const [query, setQuery] = useState("");
+  const [isFormOpen, setIsFormOpen] = useState(false);
   const wrapperRef = useRef(null);
   const navigate = useNavigate();
-
-  const [IsFormOpen, setIsFormOpen] = useState(false);
-
-  const FormOpenToggle = () => {
-    setIsFormOpen(() => !IsFormOpen);
-    console.log(IsFormOpen);
-  };
+  const { currentUser } = useAuth();
 
   const results = useMemo(() => {
     if (!query.trim()) return [];
-    const q = query.toLowerCase();
+    const normalizedQuery = query.toLowerCase();
+
     return SERVICES.filter(
-      (s) =>
-        s.title.toLowerCase().includes(q) ||
-        s.description.toLowerCase().includes(q)
+      (service) =>
+        service.title.toLowerCase().includes(normalizedQuery) ||
+        service.description.toLowerCase().includes(normalizedQuery),
     );
   }, [query]);
 
-  const onSubmit = (e) => {
-    e.preventDefault();
+  const onSubmit = (event) => {
+    event.preventDefault();
     setOpenResults(true);
   };
 
+  const handleSecondaryAction = () => {
+    navigate("/about");
+  };
+
   useEffect(() => {
-    function handleClickOutside(event) {
+    const handleClickOutside = (event) => {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
         setOpenResults(false);
       }
-    }
+    };
 
-    function handleEscapeKey(event) {
+    const handleEscapeKey = (event) => {
       if (event.key === "Escape") {
         setOpenResults(false);
+        setIsFormOpen(false);
       }
-    }
+    };
 
     document.addEventListener("mousedown", handleClickOutside);
     document.addEventListener("keydown", handleEscapeKey);
@@ -55,54 +57,54 @@ const LeftSection = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const handleEsc = (e) => {
-      if (e.key == "Escape") setIsFormOpen(false);
-      // if(e.key == "Escape")
-    };
-    document.addEventListener("keydown", handleEsc);
-    return () => document.removeEventListener("keydown", handleEsc);
-  }, []);
-
   return (
-    <div className="w-full lg:w-1/2 flex flex-col gap-6 p-6 lg:p-16">
-      <h1 className="text-5xl md:text-7xl lg:text-8xl font-extralight leading-tight text-white drop-shadow-[0_0_15px_rgba(99,102,241,0.8)] select-none animate-fadeIn text-nowrap">
-        Premium <br /> Device Repair
-      </h1>
+    <div className="flex w-full flex-col gap-6 py-4 lg:w-1/2 lg:py-8">
+      <div className="inline-flex w-fit items-center rounded-full border border-blue-400/30 bg-blue-500/10 px-4 py-2 text-sm text-blue-200">
+        {currentUser
+          ? `Signed in as ${currentUser.name}`
+          : "New: sign in to save bookings and track requests"}
+      </div>
 
-      {/* Search Bar + Results */}
+      <Motion.h1
+        initial={{ opacity: 0, y: 28, filter: "blur(10px)" }}
+        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1], delay: 0.22 }}
+        className="text-4xl font-extralight leading-tight text-white [text-shadow:0_0_12px_rgba(96,165,250,0.45),0_0_32px_rgba(59,130,246,0.28),0_0_54px_rgba(99,102,241,0.18)] select-none sm:text-5xl lg:text-6xl xl:text-[80px]"
+      >
+        Premium <br /> Device Repair
+      </Motion.h1>
+
       <div
         ref={wrapperRef}
-        className="relative w-full max-w-full sm:max-w-[620px] overflow-visible"
+        className="relative mt-2 w-full max-w-[620px] overflow-visible"
       >
-        <form onSubmit={onSubmit} className="w-full mt-4">
-          <div className="flex items-center border-2 border-white/10 h-[60px] w-full sm:w-[580px] bg-white/10 backdrop-blur-lg rounded-lg px-4 sm:px-6 shadow-lg text-white">
+        <form onSubmit={onSubmit} className="w-full">
+          <div className="flex w-full flex-col gap-3 rounded-2xl border border-white/10 bg-white/10 px-4 py-4 text-white shadow-lg backdrop-blur-lg sm:h-[60px] sm:flex-row sm:items-center sm:gap-0 sm:px-5 sm:py-0">
             <CiSearch size={22} />
             <input
               type="text"
               placeholder="Search for a service..."
-              className="bg-transparent outline-none placeholder:font-light w-full text-sm h-full ml-2"
+              className="h-full w-full bg-transparent text-sm outline-none placeholder:font-light sm:ml-2"
               value={query}
-              onChange={(e) => {
-                setQuery(e.target.value);
+              onChange={(event) => {
+                setQuery(event.target.value);
                 setOpenResults(true);
               }}
             />
             <button
               type="submit"
-              className="ml-4 px-4 py-2 bg-blue-700 hover:bg-blue-800 rounded-lg text-sm font-medium"
+              className="rounded-lg bg-blue-700 px-4 py-2 text-sm font-medium transition hover:bg-blue-800 sm:ml-4"
             >
               Search
             </button>
           </div>
         </form>
 
-        {/* Results dropdown */}
         {openResults && (
           <div
             id="search-results"
-            key={query + results.length} // ✅ dynamic key triggers re-render
-            className="absolute z-50 mt-2 sm:w-[580px] max-w-full sm:max-w-[620px] bg-white/10 backdrop-blur-xl border border-white/10 rounded-lg shadow-2xl max-h-60 overflow-y-auto animate-fadeIn"
+            key={query + results.length}
+            className="absolute z-50 mt-2 max-h-60 w-full overflow-y-auto rounded-2xl border border-white/10 bg-slate-950/90 shadow-2xl backdrop-blur-xl animate-fadeIn"
           >
             {query && results.length === 0 && (
               <div className="p-4 text-sm text-white/80">
@@ -110,54 +112,45 @@ const LeftSection = () => {
               </div>
             )}
 
-            {results.map((item) => {
-              console.log(item);
-              return (
-                <div
-                  key={item.id}
-                  className="flex items-center gap-4 p-4 hover:bg-white/10 cursor-pointer border-b border-white/5 last:border-b-0"
-                  onClick={() => {
-                    setOpenResults(false);
-                  }}
-                >
-                  <img
-                    src={item.icon}
-                    alt={item.name}
-                    className="w-14 h-14 object-contain rounded-md bg-white/5"
-                  />
-                  <div className="flex-1">
-                    <h4 className="text-white font-semibold">{item.title}</h4>
-                    <p className="text-xs text-white/70">{item.description}</p>
-                  </div>
-                  <span className="text-yellow-300 font-semibold whitespace-nowrap">
-                    ₹{item.price}
-                  </span>
+            {results.map((item) => (
+              <div
+                key={item.id}
+                className="flex cursor-pointer items-center gap-4 border-b border-white/5 p-4 last:border-b-0 hover:bg-white/10"
+                onClick={() => {
+                  setOpenResults(false);
+                  navigate(`/services/${item.slug}`);
+                }}
+              >
+                <img
+                  src={item.icon}
+                  alt={item.title}
+                  className="h-14 w-14 rounded-md bg-white/5 object-contain"
+                />
+                <div className="flex-1">
+                  <h4 className="font-semibold text-white">{item.title}</h4>
+                  <p className="text-xs text-white/70">{item.description}</p>
                 </div>
-              );
-            })}
+                <span className="whitespace-nowrap font-semibold text-yellow-300">
+                  Rs. {item.price}
+                </span>
+              </div>
+            ))}
           </div>
         )}
       </div>
-      {IsFormOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-50">
-          <BookRepairForm
-            setIsFormOpen={setIsFormOpen}
-            onClose={() => setIsFormOpen(false)}
-          />
-        </div>
-      )}
 
-      {/* CTAs */}
-      <div className="flex gap-4 w-full justify-center sm:justify-start ">
+      {isFormOpen && <BookRepairForm setIsFormOpen={setIsFormOpen} />}
+
+      <div className="flex w-full flex-wrap gap-3 pt-1">
         <button
-          onClick={FormOpenToggle}
-          className="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-xl text-white shadow-lg"
+          onClick={() => setIsFormOpen(true)}
+          className="rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white shadow-lg transition hover:bg-blue-700"
         >
           Book a Repair
         </button>
         <button
-          onClick={() => navigate("/about")}
-          className="px-6 py-3 bg-transparent border border-white/30 text-white hover:bg-white/10 rounded-xl"
+          onClick={handleSecondaryAction}
+          className="rounded-lg border border-white/30 bg-transparent px-4 py-2.5 text-sm font-medium text-white transition hover:bg-white/10"
         >
           Learn More
         </button>

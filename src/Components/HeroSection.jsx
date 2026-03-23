@@ -3,8 +3,8 @@ import RightSection from "./Hero-Components/RightSection";
 
 const HeroSection = () => {
   return (
-    <main className="w-full  flex justify-between items-center px-6 gap-6 flex-wrap lg:flex-nowrap p-20">
-      <div className="flex flex-wrap lg:flex-nowrap justify-between gap-6 w-full max-w-[1280px] items-center mt-[-80px]">
+    <main className="mx-auto flex w-full max-w-[1280px] flex-wrap items-center justify-between gap-10 px-4 py-10 sm:px-6 lg:flex-nowrap lg:px-8 lg:py-14">
+      <div className="flex w-full flex-wrap items-center justify-between gap-8 lg:flex-nowrap lg:gap-12">
         <LeftSection />
         <RightSection />
       </div>
