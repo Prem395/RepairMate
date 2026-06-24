@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion as Motion } from "framer-motion";
 import person1 from "../../assets/Images/person1.png";
 import person2 from "../../assets/Images/person2.png";
 import person3 from "../../assets/Images/person_3.webp";
@@ -42,7 +42,7 @@ const Reviews = () => {
   return (
     <div className="w-full p-4 text-white sm:p-6">
       <AnimatePresence mode="wait">
-        <motion.div
+        <Motion.div
           key={review.name}
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
@@ -65,7 +65,7 @@ const Reviews = () => {
             </div>
           </div>
           <p className="mt-3 text-sm leading-6 text-white/85">{review.comment}</p>
-        </motion.div>
+        </Motion.div>
       </AnimatePresence>
     </div>
   );

@@ -4,8 +4,9 @@ import { FcElectricalSensor } from "react-icons/fc";
 import { HiOutlineUserCircle } from "react-icons/hi2";
 import { NavLink, useNavigate } from "react-router-dom";
 import NavbarMobile from "./NavbarMobile";
+
 import { IoIosLogIn, IoIosLogOut } from "react-icons/io";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -39,8 +40,14 @@ const Navbar = () => {
             onClick={() => navigate("/")}
             className="flex items-center gap-2 sm:gap-3"
           >
-            <FcElectricalSensor size={38} className="mr-[-8px] sm:mr-[-10px] sm:text-[45px]" />
-            <h1 id="logo-text" className="text-[1.95rem] font-semibold leading-none sm:text-2xl">
+            <FcElectricalSensor
+              size={38}
+              className="mr-[-8px] sm:mr-[-10px] sm:text-[45px]"
+            />
+            <h1
+              id="logo-text"
+              className="text-[1.95rem] font-semibold leading-none sm:text-2xl"
+            >
               Repair<span className="text-blue-400">Mate</span>
             </h1>
           </button>
@@ -107,7 +114,10 @@ const Navbar = () => {
                 className="rounded-full gap-2 flex justify-center items-center border border-white/10 bg-black/20 rounded-l-full px-5 py-2 text-sm font-semibold transition hover:bg-white/5"
               >
                 Sign Up
-                <IoIosLogIn size={24} className="text-slate-200 font-semibold " />
+                <IoIosLogIn
+                  size={24}
+                  className="text-slate-200 font-semibold "
+                />
               </button>
             )}
           </div>

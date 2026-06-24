@@ -1,5 +1,5 @@
-import HeroSection from "../Components/HeroSection";
-import Navbar from "../Components/Navbar";
+import HeroSection from "../Components/Hero/HeroSection";
+import Navbar from "../Components/Layouts/Navbar";
 import { useLocomotivePage } from "../hooks/useLocomotivePage";
 
 const Home = () => {

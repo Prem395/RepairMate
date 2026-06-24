@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "../Components/Navbar";
+import Navbar from "../Components/Layouts/Navbar";
 import CompanyStats from "../Components/CompanyStats";
 import { useLocomotivePage } from "../hooks/useLocomotivePage";
 
@@ -27,7 +27,11 @@ const AboutUs = () => {
     <section className="min-h-screen w-full bg-gradient-to-br from-indigo-900 via-black to-indigo-900 text-white">
       <Navbar />
 
-      <div ref={scrollRef} data-scroll-container className="px-6 py-10 max-w-7xl mx-auto">
+      <div
+        ref={scrollRef}
+        data-scroll-container
+        className="px-6 py-10 max-w-7xl mx-auto"
+      >
         {/* Heading */}
         <h1 className="text-4xl font-bold text-center mb-10">
           About RepairMate

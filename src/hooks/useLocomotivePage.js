@@ -31,13 +31,17 @@ export const useLocomotivePage = () => {
         },
       });
 
-      locomotiveInstance.scrollTo("top", {
-        duration: 0,
-        disableLerp: true,
-      });
+      if (typeof locomotiveInstance?.scrollTo === "function") {
+        locomotiveInstance.scrollTo("top", {
+          duration: 0,
+          disableLerp: true,
+        });
+      }
 
       updateTimeout = window.setTimeout(() => {
-        locomotiveInstance?.update();
+        if (typeof locomotiveInstance?.update === "function") {
+          locomotiveInstance.update();
+        }
       }, 200);
     };
 
@@ -50,7 +54,9 @@ export const useLocomotivePage = () => {
         window.clearTimeout(updateTimeout);
       }
 
-      locomotiveInstance?.destroy();
+      if (typeof locomotiveInstance?.destroy === "function") {
+        locomotiveInstance.destroy();
+      }
     };
   }, []);
 

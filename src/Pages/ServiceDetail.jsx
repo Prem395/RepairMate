@@ -13,16 +13,6 @@ const ServiceDetails = () => {
   const [isBooking, setIsBooking] = useState(false);
   const bookingTimeoutRef = useRef(null);
 
-  const service = SERVICES.find((item) => item.slug === serviceId);
-
-  if (!service) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-white bg-black">
-        <p className="text-xl">Service not found</p>
-      </div>
-    );
-  }
-
   useEffect(() => {
     return () => {
       if (bookingTimeoutRef.current) {
@@ -30,6 +20,16 @@ const ServiceDetails = () => {
       }
     };
   }, []);
+
+  const service = SERVICES.find((item) => item.slug === serviceId);
+
+  if (!service) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-black text-white">
+        <p className="text-xl">Service not found</p>
+      </div>
+    );
+  }
 
   const handleBooking = () => {
     if (!currentUser) {
@@ -63,37 +63,37 @@ const ServiceDetails = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-black to-indigo-900 text-white px-4 py-10">
-      <div className="max-w-4xl mx-auto bg-white/10 backdrop-blur-lg p-8 rounded-2xl shadow-xl">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-black to-indigo-900 px-4 py-10 text-white">
+      <div className="mx-auto max-w-4xl rounded-2xl bg-white/10 p-8 shadow-xl backdrop-blur-lg">
         <Link
           to="/services"
-          className="flex items-center justify-start gap-1 text-white hover:text-black/50 text-lg mb-6"
+          className="mb-6 flex items-center justify-start gap-1 text-lg text-white hover:text-black/50"
         >
           <IoIosArrowBack size={22} className="hover:text-black/50" /> Back to Services
         </Link>
 
-        <div className="text-center mb-8">
+        <div className="mb-8 text-center">
           <img
             src={service.icon}
             alt={service.title}
-            className="w-24 h-24 mx-auto rounded-full shadow-lg mb-4 bg-white/20 p-2"
+            className="mx-auto mb-4 h-24 w-24 rounded-full bg-white/20 p-2 shadow-lg"
           />
           <h1 className="text-3xl font-bold">{service.title}</h1>
-          <p className="text-gray-300 mt-2">{service.description}</p>
+          <p className="mt-2 text-gray-300">{service.description}</p>
 
-          <div className="mt-4 flex flex-col sm:flex-row gap-6 justify-center items-center text-sm text-gray-300">
-            <p className="bg-white/10 px-4 py-2 rounded-full shadow">
-              💰 <span className="font-medium text-white">Starting at:</span> ₹{service.price}
+          <div className="mt-4 flex flex-col items-center justify-center gap-6 text-sm text-gray-300 sm:flex-row">
+            <p className="rounded-full bg-white/10 px-4 py-2 shadow">
+              <span className="font-medium text-white">Starting at:</span> Rs. {service.price}
             </p>
-            <p className="bg-white/10 px-4 py-2 rounded-full shadow">
-              ⏱️ <span className="font-medium text-white">Service Time:</span> {service.serviceTime}
+            <p className="rounded-full bg-white/10 px-4 py-2 shadow">
+              <span className="font-medium text-white">Service Time:</span> {service.serviceTime}
             </p>
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-10 justify-between px-6 md:px-20 text-sm text-gray-200 text-left">
+        <div className="flex flex-col justify-between gap-10 px-6 text-left text-sm text-gray-200 md:flex-row md:px-20">
           <div>
-            <h3 className="text-lg font-semibold text-indigo-200 mb-2">What's Included:</h3>
+            <h3 className="mb-2 text-lg font-semibold text-indigo-200">What's Included:</h3>
             <ul className="list-disc list-inside space-y-1">
               {service.included?.map((item) => (
                 <li key={item}>{item}</li>
@@ -102,7 +102,7 @@ const ServiceDetails = () => {
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold text-indigo-200 mb-2">Common Issues We Fix:</h3>
+            <h3 className="mb-2 text-lg font-semibold text-indigo-200">Common Issues We Fix:</h3>
             <ul className="list-disc list-inside space-y-1">
               {service.issues?.map((issue) => (
                 <li key={issue}>{issue}</li>
@@ -117,7 +117,7 @@ const ServiceDetails = () => {
             : "Please sign in first to confirm this booking and store it in the dashboard."}
         </div>
 
-        <div className="text-center mt-10">
+        <div className="mt-10 text-center">
           <button
             onClick={handleBooking}
             disabled={isBooking}

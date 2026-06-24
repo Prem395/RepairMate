@@ -1,4 +1,4 @@
-import Navbar from "../Components/Navbar";
+import Navbar from "../Components/Layouts/Navbar";
 import { useBookings } from "../context/BookingContext";
 import { useLocomotivePage } from "../hooks/useLocomotivePage";
 
@@ -18,7 +18,7 @@ const AdminPanel = () => {
   const completedBookings = bookings.filter((booking) => booking.status === "Completed").length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-black to-indigo-900 text-white pb-10">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-black to-indigo-900 pb-10 text-white">
       <Navbar />
 
       <div ref={scrollRef} data-scroll-container className="mx-auto mt-10 w-[92%] max-w-7xl">
@@ -35,7 +35,7 @@ const AdminPanel = () => {
           ))}
         </div>
 
-        <div className="mt-8 rounded-[32px] border border-white/10 bg-white/10 p-6 backdrop-blur-xl shadow-2xl">
+        <div className="mt-8 rounded-[32px] border border-white/10 bg-white/10 p-6 shadow-2xl backdrop-blur-xl">
           <div className="flex flex-col gap-3 border-b border-white/10 pb-5 md:flex-row md:items-center md:justify-between">
             <div>
               <p className="text-sm uppercase tracking-[0.3em] text-blue-300">Admin Panel</p>
@@ -47,7 +47,7 @@ const AdminPanel = () => {
           </div>
 
           {bookings.length === 0 ? (
-            <div className="rounded-3xl border border-dashed border-white/20 bg-black/20 px-6 py-12 text-center mt-6">
+            <div className="mt-6 rounded-3xl border border-dashed border-white/20 bg-black/20 px-6 py-12 text-center">
               <p className="text-xl font-semibold">No bookings yet</p>
               <p className="mt-2 text-sm text-slate-400">
                 Sign in as a customer and create a booking to see it appear here.
@@ -88,7 +88,7 @@ const AdminPanel = () => {
                       >
                         {booking.status}
                       </span>
-                      <p className="text-sm text-slate-400">Estimated cost: ₹{booking.estimatedCost}</p>
+                      <p className="text-sm text-slate-400">Estimated cost: Rs. {booking.estimatedCost}</p>
                       <p className="text-sm text-slate-400">Created: {booking.createdAt}</p>
                       <select
                         value={booking.status}

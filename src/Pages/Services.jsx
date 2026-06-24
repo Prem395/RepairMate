@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
-import Navbar from "../Components/Navbar";
+
 import { SERVICES } from "../data/servicesData.js";
 import { useLocomotivePage } from "../hooks/useLocomotivePage";
+import Navbar from "../Components/Layouts/Navbar.jsx";
 
 const Services = () => {
   const scrollRef = useLocomotivePage();
@@ -9,7 +10,11 @@ const Services = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-black to-indigo-900 text-white pb-8">
       <Navbar />
-      <div ref={scrollRef} data-scroll-container className="max-w-7xl mx-auto px-6 py-1 mt-5">
+      <div
+        ref={scrollRef}
+        data-scroll-container
+        className="max-w-7xl mx-auto px-6 py-1 mt-5"
+      >
         <h1 className="text-4xl font-bold mb-10 text-center">Our Services</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
           {SERVICES.map((service) => {

@@ -2,9 +2,9 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { motion as Motion } from "framer-motion";
 import { CiSearch } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
-import BookRepairForm from "../BookRepairForm";
+import BookRepairForm from "../BookRepairForm.jsx";
 import { SERVICES } from "../../data/servicesData.js";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../context/AuthContext.jsx";
 
 const LeftSection = () => {
   const [openResults, setOpenResults] = useState(false);

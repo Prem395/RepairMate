@@ -9,7 +9,8 @@ import { useAuth } from "./context/AuthContext";
 import Home from "./Pages/Home";
 import Services from "./Pages/Services";
 import ServiceDetail from "./Pages/ServiceDetail";
-import ProtectedRoute from "./Components/ProtectedRoute";
+import ProtectedRoute from "./Routes/ProtectedRoute";
+// import ProtectedRoute from "./Routes/ProtectedRoute";
 
 const App = () => {
   const location = useLocation();
