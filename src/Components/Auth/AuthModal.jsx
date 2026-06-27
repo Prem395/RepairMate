@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FiX } from "react-icons/fi";
 
 import LoginForm from "./LoginForm";
-import SignupForm from "./SignupForm";
+import SignupForm from "./SignUpForm";
 
 const AuthModal = ({ isOpen, onClose }) => {
   const [mode, setMode] = useState("signin");
