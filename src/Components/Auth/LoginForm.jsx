@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../context/AuthContext";
 
 const LoginForm = ({ onClose }) => {
   const { setUser, setIsAuthenticated } = useAuth();
