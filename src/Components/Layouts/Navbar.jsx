@@ -1,35 +1,53 @@
 import { useState } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 import { FcElectricalSensor } from "react-icons/fc";
-import { HiOutlineUserCircle } from "react-icons/hi2";
 import { NavLink, useNavigate } from "react-router-dom";
 import NavbarMobile from "./NavbarMobile";
+import AuthModal from "../Auth/AuthModal";
+import { useAuth } from "../../context/authContext";
+import axios from "axios";
+import { LogInIcon } from "lucide-react";
 
-import { IoIosLogIn, IoIosLogOut } from "react-icons/io";
-import { useAuth } from "../../context/AuthContext";
 
 const Navbar = () => {
+  const { user, isAuthenticated, setIsAuthenticated, setUser } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
-  const { currentUser, openAuthModal, signOut } = useAuth();
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
   const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsOpen((prev) => !prev);
   };
-
-  const handleSignOut = () => {
-    signOut();
-    navigate("/");
+  const toggleAuth = () => {
+    setIsAuthOpen((prev) => !prev);
   };
 
+  const handleLogout = async () => {
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/auth/logout",
+        {},
+        { withCredentials: true },
+      );
+
+      console.log(res);
+      setIsAuthenticated(false);
+      setUser(null);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
   const navItems = [
     { label: "Home", to: "/", end: true },
     { label: "About", to: "/about" },
     { label: "Services", to: "/services" },
   ];
 
+
+
   return (
     <>
+      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
       <div className="pointer-events-none fixed inset-x-0 top-0 z-50 flex justify-center px-3 pb-2 pt-4">
         <nav
           data-main-navbar
@@ -67,60 +85,34 @@ const Navbar = () => {
                 {item.label}
               </NavLink>
             ))}
-            {currentUser?.role === "admin" && (
-              <NavLink
-                to="/admin"
-                className={({ isActive }) =>
-                  isActive
-                    ? "rounded-full bg-white/10 px-4 py-2 font-semibold text-blue-300"
-                    : "rounded-full px-4 py-2 transition hover:bg-white/5 hover:text-blue-300"
-                }
-              >
-                Admin Panel
-              </NavLink>
-            )}
           </div>
 
-          <div className="hidden md:flex items-center ">
-            {currentUser ? (
-              <>
-                <div className="flex px-2 gap-1  items-center border border-white/10 bg-black/20 rounded-l-full overflow-hidden">
-                  <HiOutlineUserCircle
-                    size={27}
-                    className="text-slate-200 mr-[-12px]"
-                  />
-                  <p className="px-3 mr-[-12px] h-11 text-sm font-semibold uppercase  flex items-center text-slate-200 truncate">
-                    {currentUser.name}
-                  </p>
-                </div>
+          {isAuthenticated && user ? (
+            <div className="hidden md:flex items-center gap-3">
+              <div className="rounded-full border border-blue-500/20 bg-blue-500/10 px-4 py-2">
+                <span className="text-sm font-medium text-blue-300">
+                  Hi, {user.firstName}
+                </span>
+              </div>
 
-                <button
-                  type="button"
-                  onClick={handleSignOut}
-                  className="border border-white/10 bg-black/20 rounded-r-full px-2 py-[10px] text-sm font-medium transition hover:text-gray-600"
-                >
-                  <IoIosLogOut size={24} />
-                </button>
-              </>
-            ) : (
+              <button
+                onClick={handleLogout}
+                className="rounded-full border border-white/10 bg-black/20 px-5 py-2 text-sm font-normal text-white transition hover:bg-white/5"
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <div className="hidden md:flex items-center">
               <button
                 type="button"
-                onClick={() =>
-                  openAuthModal({
-                    mode: "signin",
-                    redirectTo: window.location.pathname,
-                  })
-                }
-                className="rounded-full gap-2 flex justify-center items-center border border-white/10 bg-black/20 rounded-l-full px-5 py-2 text-sm font-semibold transition hover:bg-white/5"
+                onClick={toggleAuth}
+                className="rounded-full border border-white/10 bg-white/5 px-5 py-2.5 text-sm font-normal text-white transition hover:bg-blue-300/20"
               >
-                Sign Up
-                <IoIosLogIn
-                  size={24}
-                  className="text-slate-200 font-semibold "
-                />
+                Sign In
               </button>
-            )}
-          </div>
+            </div>
+          )}
 
           <div className="md:hidden">
             <button
@@ -138,7 +130,11 @@ const Navbar = () => {
 
       {isOpen && (
         <div className="fixed top-0 left-0 w-full h-full z-[999]">
-          <NavbarMobile onClose={() => setIsOpen(false)} />
+          <NavbarMobile
+            onClose={() => setIsOpen(false)}
+            toggleAuth={toggleAuth}
+            handleLogout={handleLogout}
+          />
         </div>
       )}
     </>

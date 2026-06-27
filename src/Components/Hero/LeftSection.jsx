@@ -4,7 +4,6 @@ import { CiSearch } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import BookRepairForm from "../BookRepairForm.jsx";
 import { SERVICES } from "../../data/servicesData.js";
-import { useAuth } from "../../context/AuthContext.jsx";
 
 const LeftSection = () => {
   const [openResults, setOpenResults] = useState(false);
@@ -12,7 +11,6 @@ const LeftSection = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const wrapperRef = useRef(null);
   const navigate = useNavigate();
-  const { currentUser } = useAuth();
 
   const results = useMemo(() => {
     if (!query.trim()) return [];
@@ -60,9 +58,7 @@ const LeftSection = () => {
   return (
     <div className="flex w-full flex-col gap-5 py-2 lg:w-1/2 lg:gap-6 lg:py-8">
       <div className="inline-flex w-fit max-w-full items-center rounded-full border border-blue-400/30 bg-blue-500/10 px-4 py-2 text-xs text-blue-200 sm:text-sm">
-        {currentUser
-          ? `Signed in as ${currentUser.name}`
-          : "New: sign in to save bookings and track requests"}
+        Fast repair inquiries for appliances, gadgets, and home devices
       </div>
 
       <Motion.h1

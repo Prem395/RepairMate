@@ -2,17 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import { motion as Motion } from "framer-motion";
 import { FiX } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-import { useBookings } from "../context/BookingContext";
 
 const BookRepairForm = ({ setIsFormOpen }) => {
   const modalRef = useRef();
   const navigate = useNavigate();
-  const { currentUser, openAuthModal } = useAuth();
-  const { addBooking } = useBookings();
   const [formData, setFormData] = useState({
-    customerName: currentUser?.name || "",
-    customerEmail: currentUser?.email || "",
+    customerName: "",
+    customerEmail: "",
     deviceType: "",
     issue: "",
   });
@@ -36,12 +32,6 @@ const BookRepairForm = ({ setIsFormOpen }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (!currentUser) {
-      setIsFormOpen(false);
-      openAuthModal({ mode: "signin", redirectTo: "/" });
-      return;
-    }
-
     const booking = {
       bookingId: `RMX-${Math.floor(1000 + Math.random() * 9000)}`,
       customerName: formData.customerName,
@@ -52,10 +42,8 @@ const BookRepairForm = ({ setIsFormOpen }) => {
       issue: formData.issue,
       status: "Pending",
       createdAt: new Date().toLocaleString(),
-      userId: currentUser.id,
     };
 
-    addBooking(booking);
     setIsFormOpen(false);
     navigate("/booking-success", { state: booking });
   };
@@ -88,17 +76,15 @@ const BookRepairForm = ({ setIsFormOpen }) => {
               Book a repair in under a minute
             </h2>
             <p className="mt-4 text-sm leading-6 text-slate-300">
-              Share your device and the issue you are facing. We will save the
-              request and surface it in the dashboard right away.
+              Share your device and the issue you are facing. This demo keeps
+              the flow frontend-only and shows a confirmation screen instantly.
             </p>
 
             <div className="mt-6 space-y-3">
               {[
                 "Fast booking flow with just a few details",
                 "Works for appliances, gadgets, and general repair requests",
-                currentUser
-                  ? `Signed in as ${currentUser.name}`
-                  : "Sign in to store your request in your account",
+                "No sign-in or dashboard required for this frontend demo",
               ].map((item) => (
                 <div
                   key={item}
@@ -172,7 +158,7 @@ const BookRepairForm = ({ setIsFormOpen }) => {
                 type="submit"
                 className="w-full rounded-2xl bg-blue-600 px-4 py-3 font-semibold tracking-wide text-white shadow-lg transition hover:bg-blue-700"
               >
-                {currentUser ? "Submit Repair Request" : "Sign In to Continue"}
+                Submit Repair Request
               </button>
             </form>
           </section>

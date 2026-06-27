@@ -2,14 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { IoIosArrowBack } from "react-icons/io";
 import { SERVICES } from "../data/servicesData.js";
-import { useAuth } from "../context/AuthContext";
-import { useBookings } from "../context/BookingContext";
 
 const ServiceDetails = () => {
   const navigate = useNavigate();
   const { serviceId } = useParams();
-  const { currentUser, openAuthModal } = useAuth();
-  const { addBooking } = useBookings();
   const [isBooking, setIsBooking] = useState(false);
   const bookingTimeoutRef = useRef(null);
 
@@ -32,11 +28,6 @@ const ServiceDetails = () => {
   }
 
   const handleBooking = () => {
-    if (!currentUser) {
-      openAuthModal({ mode: "signin", redirectTo: `/services/${serviceId}` });
-      return;
-    }
-
     if (isBooking) {
       return;
     }
@@ -46,15 +37,13 @@ const ServiceDetails = () => {
       estimatedCost: service.price,
       serviceTime: service.serviceTime,
       bookingId: `RMX-${Math.floor(1000 + Math.random() * 9000)}`,
-      customerName: currentUser.name,
-      customerEmail: currentUser.email,
+      customerName: "Guest Customer",
+      customerEmail: "guest@repairmate.demo",
       issue: service.issues?.[0] || "General repair request",
       status: "Pending",
       createdAt: new Date().toLocaleString(),
-      userId: currentUser.id,
     };
 
-    addBooking(booking);
     setIsBooking(true);
 
     bookingTimeoutRef.current = window.setTimeout(() => {
@@ -112,9 +101,7 @@ const ServiceDetails = () => {
         </div>
 
         <div className="mt-10 rounded-3xl border border-white/10 bg-black/20 p-5 text-center text-sm text-slate-300">
-          {currentUser
-            ? `Booking as ${currentUser.name}. Your request will be submitted right away.`
-            : "Please sign in first to confirm this booking and store it in the dashboard."}
+          Book this service instantly to preview the frontend confirmation flow.
         </div>
 
         <div className="mt-10 text-center">
@@ -123,11 +110,7 @@ const ServiceDetails = () => {
             disabled={isBooking}
             className="rounded-full bg-indigo-600 px-8 py-3 font-semibold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:bg-indigo-500/70"
           >
-            {isBooking
-              ? "Processing Booking..."
-              : currentUser
-                ? "Book this Service"
-                : "Sign In to Book"}
+            {isBooking ? "Processing Booking..." : "Book this Service"}
           </button>
         </div>
       </div>
