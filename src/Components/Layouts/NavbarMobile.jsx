@@ -1,6 +1,6 @@
 import { FiX } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../context/AuthContext";
 
 const NavbarMobile = ({ onClose, toggleAuth, handleLogout }) => {
   const { user, isAuthenticated } = useAuth();

@@ -4,7 +4,7 @@ import { FcElectricalSensor } from "react-icons/fc";
 import { NavLink, useNavigate } from "react-router-dom";
 import NavbarMobile from "./NavbarMobile";
 import AuthModal from "../Auth/AuthModal";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
 import { LogInIcon } from "lucide-react";
 
@@ -25,7 +25,7 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:5000/auth/logout",
+        import.meta.env.VITE_API_URL + "/auth/logout",
         {},
         { withCredentials: true },
       );
