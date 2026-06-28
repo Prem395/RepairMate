@@ -1,8 +1,10 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
+import toast from "react-hot-toast";
 
 const LoginForm = ({ onClose }) => {
+  const [loading, setLoading] = useState(false);
   const { setUser, setIsAuthenticated } = useAuth();
   const [formData, setFormData] = useState({
     email: "",
@@ -11,6 +13,7 @@ const LoginForm = ({ onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const response = await axios.post(
@@ -22,6 +25,20 @@ const LoginForm = ({ onClose }) => {
       );
       setUser(response.data.data);
       setIsAuthenticated(true);
+
+      toast.success(`Welcome back, ${response.data.data.firstName}!`, {
+        icon: "👋",
+        style: {
+          background: "rgba(255,255,255,0.08)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          color: "#fff",
+          border: "1px solid rgba(255,255,255,0.12)",
+          borderRadius: "18px",
+          padding: "14px 18px",
+          boxShadow: "0 8px 32px rgba(59,130,246,0.18)",
+        },
+      });
       onClose();
       setFormData({
         email: "",
@@ -29,7 +46,21 @@ const LoginForm = ({ onClose }) => {
       });
     } catch (error) {
       console.log(error.response?.data);
-      alert(error.response?.data.message || "something went wrong");
+      toast.error(error.response?.data?.message || "Something went wrong", {
+        icon: "⚠️",
+        style: {
+          background: "rgba(255,255,255,0.08)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          color: "#fff",
+          border: "1px solid rgba(239,68,68,0.25)",
+          borderRadius: "18px",
+          padding: "14px 18px",
+          boxShadow: "0 8px 32px rgba(239,68,68,0.15)",
+        },
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -66,10 +97,13 @@ const LoginForm = ({ onClose }) => {
           />
         </label>
         <button
-          className="w-full rounded-2xl bg-sky-600 px-4 py-2.5   mt-4 outline-none transition focus:border-blue-400 hover:bg-sky-700 cursor-pointer"
-          value="Login"
+          disabled={loading}
+          className="w-full rounded-2xl bg-sky-600 px-4 py-2.5 mt-4 flex items-center justify-center gap-2"
         >
-          login
+          {loading && (
+            <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+          )}
+          Log in
         </button>
       </form>
     </div>

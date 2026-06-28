@@ -7,6 +7,7 @@ import AuthModal from "../Auth/AuthModal";
 import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
 import { LogInIcon } from "lucide-react";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
   const { user, isAuthenticated, setIsAuthenticated, setUser } = useAuth();
@@ -32,6 +33,20 @@ const Navbar = () => {
       console.log(res);
       setIsAuthenticated(false);
       setUser(null);
+      toast.success(`You have been logged out.`, {
+        // icon: "",
+        icon: "✅",
+        style: {
+          background: "rgba(255,255,255,0.08)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          color: "#fff",
+          border: "1px solid rgba(255,255,255,0.12)",
+          borderRadius: "18px",
+          padding: "14px 18px",
+          boxShadow: "0 8px 32px rgba(59,130,246,0.18)",
+        },
+      });
     } catch (error) {
       console.log(error.message);
     }

@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react-refresh/only-export-components */
 import axios from "axios";
 import {
@@ -17,13 +16,19 @@ export const AuthProvider = ({ children }) => {
 
   const checkAuth = async () => {
     try {
-      const respose = await axios.get(import.meta.env.VITE_API_URL + "/auth/me", {
-        withCredentials: true,
-      });
-
+      const respose = await axios.get(
+        import.meta.env.VITE_API_URL + "/auth/me",
+        {
+          withCredentials: true,
+        },
+      );
       setUser(respose.data.user);
       setIsAuthenticated(true);
     } catch (error) {
+      if (error.response?.status !== 401) {
+        console.error(error);
+      }
+
       setUser(null);
       setIsAuthenticated(false);
     }
