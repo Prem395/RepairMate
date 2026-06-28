@@ -8,7 +8,6 @@ import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
 import { LogInIcon } from "lucide-react";
 
-
 const Navbar = () => {
   const { user, isAuthenticated, setIsAuthenticated, setUser } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
@@ -25,7 +24,7 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       const res = await axios.post(
-        import.meta.env.VITE_API_URL + "/auth/logout",
+        `${import.meta.env.VITE_API_URL}/auth/logout`,
         {},
         { withCredentials: true },
       );
@@ -42,8 +41,6 @@ const Navbar = () => {
     { label: "About", to: "/about" },
     { label: "Services", to: "/services" },
   ];
-
-
 
   return (
     <>

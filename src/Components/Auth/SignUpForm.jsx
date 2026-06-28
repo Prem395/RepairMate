@@ -29,7 +29,7 @@ const SignUpForm = ({ setMode }) => {
         password: formData.password,
       };
       const response = await axios.post(
-      import.meta.env.VITE_API_URL + "/auth/signup",
+        `${import.meta.env.VITE_API_URL}/auth/signup`,
         payLoad,
       );
       console.log(response.data);
