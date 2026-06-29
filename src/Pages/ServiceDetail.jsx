@@ -2,9 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { IoIosArrowBack } from "react-icons/io";
 import { SERVICES } from "../data/servicesData.js";
+import { useAuth } from "../context/AuthContext.jsx";
 
 const ServiceDetails = () => {
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
   const { serviceId } = useParams();
   const [isBooking, setIsBooking] = useState(false);
   const bookingTimeoutRef = useRef(null);
@@ -58,7 +60,8 @@ const ServiceDetails = () => {
           to="/services"
           className="mb-6 flex items-center justify-start gap-1 text-lg text-white hover:text-black/50"
         >
-          <IoIosArrowBack size={22} className="hover:text-black/50" /> Back to Services
+          <IoIosArrowBack size={22} className="hover:text-black/50" /> Back to
+          Services
         </Link>
 
         <div className="mb-8 text-center">
@@ -72,17 +75,21 @@ const ServiceDetails = () => {
 
           <div className="mt-4 flex flex-col items-center justify-center gap-6 text-sm text-gray-300 sm:flex-row">
             <p className="rounded-full bg-white/10 px-4 py-2 shadow">
-              <span className="font-medium text-white">Starting at:</span> Rs. {service.price}
+              <span className="font-medium text-white">Starting at:</span> Rs.{" "}
+              {service.price}
             </p>
             <p className="rounded-full bg-white/10 px-4 py-2 shadow">
-              <span className="font-medium text-white">Service Time:</span> {service.serviceTime}
+              <span className="font-medium text-white">Service Time:</span>{" "}
+              {service.serviceTime}
             </p>
           </div>
         </div>
 
         <div className="flex flex-col justify-between gap-10 px-6 text-left text-sm text-gray-200 md:flex-row md:px-20">
           <div>
-            <h3 className="mb-2 text-lg font-semibold text-indigo-200">What's Included:</h3>
+            <h3 className="mb-2 text-lg font-semibold text-indigo-200">
+              What's Included:
+            </h3>
             <ul className="list-disc list-inside space-y-1">
               {service.included?.map((item) => (
                 <li key={item}>{item}</li>
@@ -91,7 +98,9 @@ const ServiceDetails = () => {
           </div>
 
           <div>
-            <h3 className="mb-2 text-lg font-semibold text-indigo-200">Common Issues We Fix:</h3>
+            <h3 className="mb-2 text-lg font-semibold text-indigo-200">
+              Common Issues We Fix:
+            </h3>
             <ul className="list-disc list-inside space-y-1">
               {service.issues?.map((issue) => (
                 <li key={issue}>{issue}</li>
@@ -103,16 +112,27 @@ const ServiceDetails = () => {
         <div className="mt-10 rounded-3xl border border-white/10 bg-black/20 p-5 text-center text-sm text-slate-300">
           Book this service instantly to preview the frontend confirmation flow.
         </div>
-
-        <div className="mt-10 text-center">
-          <button
-            onClick={handleBooking}
-            disabled={isBooking}
-            className="rounded-full bg-indigo-600 px-8 py-3 font-semibold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:bg-indigo-500/70"
-          >
-            {isBooking ? "Processing Booking..." : "Book this Service"}
-          </button>
-        </div>
+        {isAuthenticated ? (
+          <div className="mt-10 text-center">
+            <button
+              onClick={handleBooking}
+              disabled={isBooking}
+              className="rounded-full bg-indigo-600 px-8 py-3 font-semibold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:bg-indigo-500/70"
+            >
+              {isBooking ? "Processing Booking..." : "Book this Service"}
+            </button>
+          </div>
+        ) : (
+          <div className="mt-10 text-center">
+            <button
+              onClick={handleBooking}
+              disabled={isBooking}
+              className="rounded-full bg-indigo-600 px-8 py-3 font-semibold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:bg-indigo-500/70"
+            >
+              login to Book this Service
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
