@@ -1,82 +1,128 @@
 import { FiX } from "react-icons/fi";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 const NavbarMobile = ({ onClose, toggleAuth, handleLogout }) => {
+  const navigate = useNavigate();
   const { user, isAuthenticated } = useAuth();
+
   return (
-    <div className="fixed inset-0 bg-black/40 z-[999] flex justify-end">
-      <div className="relative h-full w-[280px] border border-white/10 bg-black/55 px-6 py-8 text-white shadow-xl backdrop-blur-lg">
+    <div className="fixed inset-0 z-[999] flex justify-end bg-black/50 backdrop-blur-sm">
+      <div className="relative flex h-full w-[300px] flex-col border-l border-white/10 bg-[#0b1020]/95 px-6 py-8 text-white backdrop-blur-xl">
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-4 right-4 text-white hover:text-blue-400"
+          className="absolute right-5 top-5 text-white transition hover:text-blue-400"
         >
           <FiX size={24} />
         </button>
 
-        <div className="mt-12 flex flex-col gap-6 text-lg font-medium">
+        {/* Nav Links */}
+        <div className="mt-14 flex flex-col gap-5">
           <NavLink
             to="/"
             end
             onClick={onClose}
             className={({ isActive }) =>
               isActive
-                ? "text-left text-blue-400"
-                : "text-left hover:text-blue-400"
+                ? "font-medium text-blue-400"
+                : "font-medium text-white transition hover:text-blue-400"
             }
           >
             Home
           </NavLink>
+
           <NavLink
             to="/about"
             onClick={onClose}
             className={({ isActive }) =>
               isActive
-                ? "text-left text-blue-400"
-                : "text-left hover:text-blue-400"
+                ? "font-medium text-blue-400"
+                : "font-medium text-white transition hover:text-blue-400"
             }
           >
             About
           </NavLink>
+
           <NavLink
             to="/services"
             onClick={onClose}
             className={({ isActive }) =>
               isActive
-                ? "text-left text-blue-400"
-                : "text-left hover:text-blue-400"
+                ? "font-medium text-blue-400"
+                : "font-medium text-white transition hover:text-blue-400"
             }
           >
             Services
           </NavLink>
         </div>
 
+        {/* User Section */}
         {isAuthenticated && user ? (
-          <div className="mt-10 border-t border-white/10 pt-6 flex flex-col gap-2 ">
-            <div className="rounded-full border border-blue-500/20 bg-blue-500/10 px-4 py-2 flex justify-center items-center">
-              <span className="text-sm  font-medium text-blue-300">
-                Hi, {user.firstName}
-              </span>
+          <div className="mt-8 rounded-2xl border border-white/10 bg-white/5 p-4">
+            <p className="text-xs uppercase tracking-wider text-slate-500">
+              Signed in as
+            </p>
+
+            <h3 className="mt-2 text-lg font-semibold text-blue-300">
+              {user.firstName} {user.lastName}
+            </h3>
+
+            <p className="mt-1 truncate text-xs text-slate-400">
+              {user.email}
+            </p>
+
+            <div className="mt-5 flex flex-col gap-2">
+              <button
+                onClick={() => {
+                  onClose();
+                  navigate("/my-bookings");
+                }}
+                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm transition hover:bg-white/10"
+              >
+                📋 My Bookings
+              </button>
+
+              <button
+                onClick={() => {
+                  onClose();
+                  handleLogout();
+                }}
+                className="w-full rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300 transition hover:bg-red-500/20"
+              >
+                🚪 Logout
+              </button>
             </div>
-            <button
-              onClick={handleLogout}
-              className="rounded-full border border-white/10 bg-black/20 px-5 py-2 text-sm font-normal text-white transition hover:bg-white/5"
-            >
-              Logout
-            </button>
           </div>
         ) : (
-          <div className="mt-10 border-t border-white/10 pt-6">
+          <div className="mt-8 border-t border-white/10 pt-6">
             <button
               type="button"
               onClick={toggleAuth}
-              className="w-full rounded-2xl bg-blue-600 px-4 py-3 text-sm font-semibold"
+              className="w-full rounded-2xl bg-blue-600 px-4 py-3 text-sm font-semibold transition hover:bg-blue-700"
             >
-              Sign up
+              Sign In
             </button>
           </div>
         )}
+
+        {/* Footer */}
+        <div className="mt-auto border-t border-white/10 pt-5">
+          <p className="text-xs uppercase tracking-[0.2em] text-slate-500">
+            Need Help?
+          </p>
+
+          <p className="mt-2 text-sm text-slate-300">
+            Contact Support
+          </p>
+
+          <a
+            href="mailto:support@repairmate.com"
+            className="text-sm text-blue-300 transition hover:text-blue-200"
+          >
+            support@repairmate.com
+          </a>
+        </div>
       </div>
     </div>
   );

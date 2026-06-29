@@ -2,8 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import { motion as Motion } from "framer-motion";
 import { FiX } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { useModal } from "../context/AuthModalContext";
 
 const BookRepairForm = ({ setIsFormOpen }) => {
+  const { isAuthenticated } = useAuth();
+  const { openAuthModal } = useModal();
   const modalRef = useRef();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -154,12 +158,21 @@ const BookRepairForm = ({ setIsFormOpen }) => {
                 />
               </label>
 
-              <button
-                type="submit"
-                className="w-full rounded-2xl bg-blue-600 px-4 py-3 font-semibold tracking-wide text-white shadow-lg transition hover:bg-blue-700"
-              >
-                Submit Repair Request
-              </button>
+              {isAuthenticated ? (
+                <button
+                  type="submit"
+                  className="w-full rounded-2xl bg-blue-600 px-4 py-3 font-semibold tracking-wide text-white shadow-lg transition hover:bg-blue-700"
+                >
+                  Submit Repair Request
+                </button>
+              ) : (
+                <button
+                  onClick={openAuthModal}
+                  className="w-full rounded-2xl bg-blue-600 px-4 py-3 font-semibold tracking-wide text-white shadow-lg transition hover:bg-blue-700"
+                >
+                  Login to Submit
+                </button>
+              )}
             </form>
           </section>
         </div>

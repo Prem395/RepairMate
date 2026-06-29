@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 import { FcElectricalSensor } from "react-icons/fc";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -6,20 +6,20 @@ import NavbarMobile from "./NavbarMobile";
 import AuthModal from "../Auth/AuthModal";
 import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
-import { LogInIcon } from "lucide-react";
+import { ChevronDown, ChevronUp, LogInIcon } from "lucide-react";
 import toast from "react-hot-toast";
+import { useModal } from "../../context/AuthModalContext";
 
 const Navbar = () => {
   const { user, isAuthenticated, setIsAuthenticated, setUser } = useAuth();
+  const [bookingModal, setbookingModal] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [isAuthOpen, setIsAuthOpen] = useState(false);
   const navigate = useNavigate();
+  const menuRef = useRef(null);
+  const { openAuthModal } = useModal();
 
   const toggleMenu = () => {
     setIsOpen((prev) => !prev);
-  };
-  const toggleAuth = () => {
-    setIsAuthOpen((prev) => !prev);
   };
 
   const handleLogout = async () => {
@@ -31,6 +31,7 @@ const Navbar = () => {
       );
 
       console.log(res);
+      setbookingModal(false);
       setIsAuthenticated(false);
       setUser(null);
       toast.success(`You have been logged out.`, {
@@ -51,6 +52,21 @@ const Navbar = () => {
       console.log(error.message);
     }
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setbookingModal(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const navItems = [
     { label: "Home", to: "/", end: true },
     { label: "About", to: "/about" },
@@ -59,7 +75,6 @@ const Navbar = () => {
 
   return (
     <>
-      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
       <div className="pointer-events-none fixed inset-x-0 top-0 z-50 flex justify-center px-3 pb-2 pt-4">
         <nav
           data-main-navbar
@@ -100,25 +115,68 @@ const Navbar = () => {
           </div>
 
           {isAuthenticated && user ? (
-            <div className="hidden md:flex items-center gap-3">
-              <div className="rounded-full border border-blue-500/20 bg-blue-500/10 px-4 py-2">
-                <span className="text-sm font-medium text-blue-300">
+            <div
+              ref={menuRef}
+              className="hidden md:flex items-center gap-3 relative"
+            >
+              <div
+                onClick={() => {
+                  setbookingModal((prev) => !prev);
+                }}
+                className=" flex  rounded-full border border-blue-500/20 bg-blue-500/10 px-4 py-2 hover:bg-blue-500/15 transition"
+              >
+                <button className="text-sm font-medium text-blue-300">
                   Hi, {user.firstName}
-                </span>
+                </button>
+
+                <ChevronDown
+                  size={20}
+                  className={`ml-2 transition-transform duration-200 ${
+                    bookingModal ? "rotate-180" : "rotate-0"
+                  }`}
+                />
               </div>
 
-              <button
-                onClick={handleLogout}
-                className="rounded-full border border-white/10 bg-black/20 px-5 py-2 text-sm font-normal text-white transition hover:bg-white/5"
-              >
-                Logout
-              </button>
+              {bookingModal && (
+                <div className="absolute right-0 top-[72px] w-64 overflow-hidden rounded-3xl border border-white/10 bg-[#13192d]/95 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
+                  <div className="border-b border-white/10 px-5 py-4">
+                    <h3 className="font-semibold text-white">
+                      {user.firstName} {user.lastName}
+                    </h3>
+
+                    <p className="mt-1 truncate text-xs text-slate-400">
+                      {user.email}
+                    </p>
+                  </div>
+
+                  <div className="p-2">
+                    <button
+                      onClick={() => {
+                        setbookingModal(false);
+                        navigate("/my-bookings");
+                      }}
+                      className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm text-slate-200 transition hover:bg-white/5"
+                    >
+                      📋
+                      <span>My Bookings</span>
+                    </button>
+
+                    <button
+                      onClick={handleLogout}
+                      className="mt-1 flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm text-slate-300 transition hover:bg-white/5"
+                    >
+                      🚪
+                      <span>Logout</span>
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             <div className="hidden md:flex items-center">
               <button
                 type="button"
-                onClick={toggleAuth}
+                onClick={openAuthModal}
                 className="rounded-full border border-white/10 bg-white/5 px-5 py-2.5 text-sm font-normal text-white transition hover:bg-blue-300/20"
               >
                 Sign In
@@ -144,7 +202,7 @@ const Navbar = () => {
         <div className="fixed top-0 left-0 w-full h-full z-[999]">
           <NavbarMobile
             onClose={() => setIsOpen(false)}
-            toggleAuth={toggleAuth}
+            toggleAuth={openAuthModal}
             handleLogout={handleLogout}
           />
         </div>

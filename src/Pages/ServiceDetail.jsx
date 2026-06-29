@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { IoIosArrowBack } from "react-icons/io";
 import { SERVICES } from "../data/servicesData.js";
 import { useAuth } from "../context/AuthContext.jsx";
+import { useModal } from "../context/AuthModalContext.jsx";
 
 const ServiceDetails = () => {
   const navigate = useNavigate();
@@ -10,6 +11,7 @@ const ServiceDetails = () => {
   const { serviceId } = useParams();
   const [isBooking, setIsBooking] = useState(false);
   const bookingTimeoutRef = useRef(null);
+  const { openAuthModal } = useModal();
 
   useEffect(() => {
     return () => {
@@ -125,11 +127,10 @@ const ServiceDetails = () => {
         ) : (
           <div className="mt-10 text-center">
             <button
-              onClick={handleBooking}
-              disabled={isBooking}
+              onClick={openAuthModal}
               className="rounded-full bg-indigo-600 px-8 py-3 font-semibold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:bg-indigo-500/70"
             >
-              login to Book this Service
+              Login to Book
             </button>
           </div>
         )}
