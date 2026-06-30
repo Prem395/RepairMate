@@ -19,6 +19,7 @@ const AuthModal = ({ isOpen, onClose }) => {
         onClick={(e) => e.stopPropagation()}
       >
         <button
+        
           type="button"
           onClick={onClose}
           className="absolute right-5 top-5 rounded-full border border-white/10 bg-white/5 p-2 text-white transition hover:bg-white/10"

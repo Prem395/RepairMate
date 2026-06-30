@@ -64,7 +64,7 @@ const BookRepairForm = ({ setIsFormOpen }) => {
         <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500" />
 
         <button
-          type="button"
+          type="submit"
           onClick={() => setIsFormOpen(false)}
           className="absolute right-2 top-[12px] z-10  rounded-full border border-white/10 bg-white/5 p-2 text-white transition hover:bg-white/10"
         >
