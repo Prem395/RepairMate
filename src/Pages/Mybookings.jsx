@@ -244,7 +244,7 @@ const Mybookings = () => {
                   return (
                     <div
                       key={item._id}
-                      className="relative w-full md:min-w-[400px] md:max-w-[400px] rounded-2xl overflow-hidden transition-all duration-300 "
+                      className="relative w-full md:min-w-[450px] md:max-w-[450px] rounded-2xl overflow-hidden transition-all duration-300 "
                       style={{
                         background:
                           "linear-gradient(145deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.03) 100%)",
@@ -332,10 +332,10 @@ const Mybookings = () => {
                       </div>
 
                       {/* Fields */}
-                      <div className="px-5 pb-2 grid grid-cols-2 gap-2">
+                      <div className="px-5 pb-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
                         {/* Booking ID */}
                         <div
-                          className="flex items-center gap-2 rounded-xl px-3 py-2.5"
+                          className="flex items-center gap-2 rounded-xl px-3 py-2.5  "
                           style={{
                             background: "rgba(255,255,255,0.04)",
                             border: "1px solid rgba(255,255,255,0.07)",
