@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { IoIosArrowBack } from "react-icons/io";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useModal } from "../context/AuthModalContext.jsx";
-import { useServices } from "../context/serviceContext.jsx";
+import { useServices } from "../context/ServiceContext.jsx";
 
 const ServiceDetails = () => {
   const navigate = useNavigate();

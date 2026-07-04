@@ -3,7 +3,7 @@ import { motion as Motion } from "framer-motion";
 import { CiSearch } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import BookRepairForm from "../BookRepairForm.jsx";
-import { useServices } from "../../context/serviceContext.jsx";
+import { useServices } from "../../context/ServiceContext.jsx";
 
 const LeftSection = () => {
   const [openResults, setOpenResults] = useState(false);

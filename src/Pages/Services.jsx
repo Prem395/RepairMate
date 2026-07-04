@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useLocomotivePage } from "../hooks/useLocomotivePage";
 import Navbar from "../Components/Layouts/Navbar.jsx";
-import { useServices } from "../context/serviceContext.jsx";
+import { useServices } from "../context/ServiceContext.jsx";
 
 const Services = () => {
   const { services, loading } = useServices();
