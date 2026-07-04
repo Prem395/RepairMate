@@ -58,7 +58,7 @@ const LeftSection = () => {
 
   return (
     <div className="flex w-full flex-col gap-5 py-2 lg:w-1/2 lg:gap-6 lg:py-8">
-      <div className="inline-flex w-fit max-w-full items-center rounded-full border border-blue-400/30 bg-blue-500/10 px-4 py-2 text-xs text-blue-200 sm:text-sm">
+      <div className="inline-flex w-full max-w-[500px] items-center justify-center border border-blue-400/30 bg-blue-500/10 px-4 py-2 rounded-full  text-xs text-blue-200 sm:w-fit sm:text-sm">
         Fast repair inquiries for appliances, gadgets, and home devices
       </div>
 
@@ -67,9 +67,9 @@ const LeftSection = () => {
         initial={{ opacity: 0, y: 28, filter: "blur(10px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1], delay: 0.22 }}
-        className="text-[3.45rem] font-extralight leading-[0.9] text-white [text-shadow:0_0_12px_rgba(96,165,250,0.45),0_0_32px_rgba(59,130,246,0.28),0_0_54px_rgba(99,102,241,0.18)] select-none sm:text-5xl lg:text-6xl xl:text-[80px]"
+        className="mx-auto max-w-[530px] sm:max-w-none text-[2.8rem] sm:text-5xl lg:text-6xl xl:text-[80px] font-extralight leading-[0.9] text-white [text-shadow:0_0_12px_rgba(96,165,250,0.45),0_0_32px_rgba(59,130,246,0.28),0_0_54px_rgba(99,102,241,0.18)] select-none"
       >
-        Premium <br /> Device Repair
+        Premium Device Repair
       </Motion.h1>
 
       <div
