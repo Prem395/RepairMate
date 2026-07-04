@@ -6,7 +6,7 @@ import "./index.css";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { Toaster } from "react-hot-toast";
 import { ModalProvider } from "./context/AuthModalContext.jsx";
-import { ServiceProvider } from "./context/serviceContext.jsx";
+import { ServiceProvider } from "./context/ServiceContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
