@@ -99,12 +99,16 @@ const LoginForm = ({ onClose }) => {
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded-2xl bg-sky-600 px-4 py-2.5 mt-4 flex items-center justify-center gap-2"
+          className="w-full rounded-2xl bg-sky-600 px-4 py-2.5 mt-4 flex items-center justify-center gap-2 disabled:opacity-70"
         >
-          {loading && (
-            <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+          {loading ? (
+            <>
+              <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              Logging in...
+            </>
+          ) : (
+            "Log in"
           )}
-          Log in
         </button>
       </form>
     </div>

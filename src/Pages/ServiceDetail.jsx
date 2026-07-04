@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { IoIosArrowBack } from "react-icons/io";
-import { SERVICES } from "../data/servicesData.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useModal } from "../context/AuthModalContext.jsx";
+import { useServices } from "../context/serviceContext.jsx";
 
 const ServiceDetails = () => {
   const navigate = useNavigate();
+  const { services } = useServices();
   const { isAuthenticated } = useAuth();
   const { serviceId } = useParams();
   const [isBooking, setIsBooking] = useState(false);
@@ -21,7 +22,7 @@ const ServiceDetails = () => {
     };
   }, []);
 
-  const service = SERVICES.find((item) => item.slug === serviceId);
+  const service = services.find((item) => item.slug === serviceId);
 
   if (!service) {
     return (
@@ -32,10 +33,6 @@ const ServiceDetails = () => {
   }
 
   const handleBooking = () => {
-    if (isBooking) {
-      return;
-    }
-
     const booking = {
       serviceName: service.title,
       estimatedCost: service.price,
@@ -56,7 +53,7 @@ const ServiceDetails = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-black to-indigo-900 px-4 py-10 text-white">
+    <div className="min-h-screen  px-4 py-10 text-white">
       <div className="mx-auto max-w-4xl rounded-2xl bg-white/10 p-8 shadow-xl backdrop-blur-lg">
         <Link
           to="/services"
@@ -111,9 +108,6 @@ const ServiceDetails = () => {
           </div>
         </div>
 
-        <div className="mt-10 rounded-3xl border border-white/10 bg-black/20 p-5 text-center text-sm text-slate-300">
-          Book this service instantly to preview the frontend confirmation flow.
-        </div>
         {isAuthenticated ? (
           <div className="mt-10 text-center">
             <button

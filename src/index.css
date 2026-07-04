@@ -17,7 +17,7 @@ html {
   font-family: "Rubik";
 }
 
-#logo-text span {
+#logo-text {
   font-family: "Goldman";
 }
 
@@ -69,3 +69,5 @@ body::-webkit-scrollbar {
   );
   animation: shimmer 1.5s infinite;
 }
+
+

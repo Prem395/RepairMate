@@ -3,10 +3,11 @@ import { motion as Motion } from "framer-motion";
 import { CiSearch } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import BookRepairForm from "../BookRepairForm.jsx";
-import { SERVICES } from "../../data/servicesData.js";
+import { useServices } from "../../context/serviceContext.jsx";
 
 const LeftSection = () => {
   const [openResults, setOpenResults] = useState(false);
+  const { services } = useServices();
   const [query, setQuery] = useState("");
   const [isFormOpen, setIsFormOpen] = useState(false);
   const wrapperRef = useRef(null);
@@ -16,12 +17,12 @@ const LeftSection = () => {
     if (!query.trim()) return [];
     const normalizedQuery = query.toLowerCase();
 
-    return SERVICES.filter(
+    return services.filter(
       (service) =>
         service.title.toLowerCase().includes(normalizedQuery) ||
         service.description.toLowerCase().includes(normalizedQuery),
     );
-  }, [query]);
+  }, [query, services]);
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -62,6 +63,7 @@ const LeftSection = () => {
       </div>
 
       <Motion.h1
+        id="logo-text"
         initial={{ opacity: 0, y: 28, filter: "blur(10px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1], delay: 0.22 }}

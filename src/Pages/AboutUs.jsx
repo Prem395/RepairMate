@@ -24,7 +24,7 @@ const AboutUs = () => {
   ];
 
   return (
-    <section className="min-h-screen w-full bg-gradient-to-br from-indigo-900 via-black to-indigo-900 text-white">
+    <section className="min-h-screen w-full  text-white">
       <Navbar />
 
       <div

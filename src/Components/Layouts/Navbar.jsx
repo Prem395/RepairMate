@@ -6,7 +6,12 @@ import NavbarMobile from "./NavbarMobile";
 import AuthModal from "../Auth/AuthModal";
 import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
-import { ChevronDown, ChevronUp, LogInIcon } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronUp,
+  LogInIcon,
+  UserCircleIcon,
+} from "lucide-react";
 import toast from "react-hot-toast";
 import { useModal } from "../../context/AuthModalContext";
 
@@ -113,76 +118,80 @@ const Navbar = () => {
               </NavLink>
             ))}
           </div>
-
-          {isAuthenticated && user ? (
-            <div
-              ref={menuRef}
-              className="hidden md:flex items-center gap-3 relative"
-            >
-              <div
-                onClick={() => {
-                  setbookingModal((prev) => !prev);
-                }}
-                className=" flex  rounded-full border border-blue-500/20 bg-blue-500/10 px-4 py-2 hover:bg-blue-500/15 transition"
-              >
-                <button className="text-sm font-medium text-blue-300">
-                  Hi, {user.firstName}
-                </button>
-
-                <ChevronDown
-                  size={20}
-                  className={`ml-2 transition-transform duration-200 ${
-                    bookingModal ? "rotate-180" : "rotate-0"
-                  }`}
-                />
-              </div>
-
-              {bookingModal && (
-                <div className="absolute right-0 top-[72px] w-64 overflow-hidden rounded-3xl border border-white/10 bg-[#13192d]/95 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
-                  <div className="border-b border-white/10 px-5 py-4">
-                    <h3 className="font-semibold text-white">
-                      {user.firstName} {user.lastName}
-                    </h3>
-
-                    <p className="mt-1 truncate text-xs text-slate-400">
-                      {user.email}
-                    </p>
-                  </div>
-
-                  <div className="p-2">
-                    <button
-                      onClick={() => {
-                        setbookingModal(false);
-                        navigate("/my-bookings");
-                      }}
-                      className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm text-slate-200 transition hover:bg-white/5"
+          <div className="hidden md:flex items-center justify-end gap-3 w-[180px]">
+            {isAuthenticated && user ? (
+              <div ref={menuRef} className=" relative">
+                <div
+                  onClick={() => {
+                    setbookingModal((prev) => !prev);
+                  }}
+                  className=" flex  rounded-full border border-blue-500/20 bg-blue-500/10 px-4 py-2 hover:bg-blue-500/15 transition"
+                >
+                  <button className="text-sm  text-blue-300">
+                    <span
+                      id="logo-text"
+                      className="flex justify-center items-center gap-2 "
                     >
-                      📋
-                      <span>My Bookings</span>
-                    </button>
+                      <UserCircleIcon size={22} className="text-blue-300" />
+                      {user.firstName}
+                    </span>
+                  </button>
 
-                    <button
-                      onClick={handleLogout}
-                      className="mt-1 flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm text-slate-300 transition hover:bg-white/5"
-                    >
-                      🚪
-                      <span>Logout</span>
-                    </button>
-                  </div>
+                  <ChevronDown
+                    size={20}
+                    className={`ml-1 transition-transform duration-200  ${
+                      bookingModal ? "rotate-180" : "rotate-0"
+                    }`}
+                  />
                 </div>
-              )}
-            </div>
-          ) : (
-            <div className="hidden md:flex items-center">
-              <button
-                type="button"
-                onClick={openAuthModal}
-                className="rounded-full border border-white/10 bg-white/5 px-5 py-2.5 text-sm font-normal text-white transition hover:bg-blue-300/20"
-              >
-                Sign In
-              </button>
-            </div>
-          )}
+
+                {bookingModal && (
+                  <div className="absolute right-0 top-[72px] w-64 overflow-hidden rounded-3xl border border-white/10 bg-[#13192d]/95 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
+                    <div className="border-b border-white/10 px-5 py-4">
+                      <h3 className="font-semibold text-white">
+                        {user.firstName} {user.lastName}
+                      </h3>
+
+                      <p className="mt-1 truncate text-xs text-slate-400">
+                        {user.email}
+                      </p>
+                    </div>
+
+                    <div className="p-2">
+                      <button
+                        onClick={() => {
+                          setbookingModal(false);
+                          navigate("/my-bookings");
+                        }}
+                        className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm text-slate-200 transition hover:bg-white/5"
+                      >
+                        📋
+                        <span>My Bookings</span>
+                      </button>
+
+                      <button
+                        onClick={handleLogout}
+                        className="mt-1 flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm text-slate-300 transition hover:bg-white/5"
+                      >
+                        🚪
+                        <span>Logout</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="hidden md:flex items-center">
+                <button
+                  type="button"
+                  onClick={openAuthModal}
+                  className="rounded-full border border-white/10 bg-white/5 px-6 py-2.5 text-sm font-normal text-white transition hover:bg-blue-300/20"
+                >
+                  Sign In
+                </button>
+              </div>
+            )}
+          </div>
 
           <div className="md:hidden">
             <button

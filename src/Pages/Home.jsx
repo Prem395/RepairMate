@@ -6,7 +6,7 @@ const Home = () => {
   const scrollRef = useLocomotivePage();
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden bg-gradient-to-br from-indigo-900 via-black to-indigo-900 text-white">
+    <div className="min-h-screen w-full overflow-x-hidden  text-white">
       <Navbar />
       <main ref={scrollRef} data-scroll-container>
         <HeroSection />

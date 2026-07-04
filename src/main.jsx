@@ -6,16 +6,22 @@ import "./index.css";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { Toaster } from "react-hot-toast";
 import { ModalProvider } from "./context/AuthModalContext.jsx";
+import { ServiceProvider } from "./context/serviceContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      <AuthProvider>
-        <ModalProvider>
-          <App />
-          <Toaster position="bottom-center" toastOptions={{ duration: 2500 }} />
-        </ModalProvider>
-      </AuthProvider>
+      <ServiceProvider>
+        <AuthProvider>
+          <ModalProvider>
+            <App />
+            <Toaster
+              position="bottom-center"
+              toastOptions={{ duration: 2500 }}
+            />
+          </ModalProvider>
+        </AuthProvider>
+      </ServiceProvider>
     </BrowserRouter>
   </StrictMode>,
 );
