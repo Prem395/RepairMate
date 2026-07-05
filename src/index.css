@@ -9,6 +9,8 @@ html {
   scroll-behavior: auto;
 }
 
+
+
 * {
   margin: 0;
   padding: 0;
@@ -69,5 +71,3 @@ body::-webkit-scrollbar {
   );
   animation: shimmer 1.5s infinite;
 }
-
-

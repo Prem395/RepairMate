@@ -11,12 +11,15 @@ import { useAuth } from "../context/AuthContext";
 import { useModal } from "../context/AuthModalContext";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useBookingModal } from "../context/BookingModalContext";
 
-const BookRepairForm = ({ setIsFormOpen }) => {
+const BookRepairForm = () => {
   const { isAuthenticated } = useAuth();
   const { openAuthModal } = useModal();
   const [loading, setLoading] = useState(false);
   const modalRef = useRef();
+  const { setIsBookingFormOpen, bookingData } =
+    useBookingModal();
   const [imageFile, setimageFile] = useState(null);
   const [formData, setformData] = useState({
     customerName: "",
@@ -29,13 +32,13 @@ const BookRepairForm = ({ setIsFormOpen }) => {
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
-        setIsFormOpen(false);
+        setIsBookingFormOpen(false);
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [setIsFormOpen]);
+  }, [setIsBookingFormOpen]);
 
   const handChange = (e) => {
     const { name, value } = e.target;
@@ -54,6 +57,10 @@ const BookRepairForm = ({ setIsFormOpen }) => {
       data.append("deviceType", formData.deviceType);
       data.append("issueDescription", formData.issueDescription);
 
+      if (bookingData?.title) {
+        data.append("serviceType", bookingData.title);
+      }
+
       if (imageFile && imageFile.size > 5 * 1024 * 1024) {
         toast.error("File size exceeds 5MB limit");
         return;
@@ -62,6 +69,7 @@ const BookRepairForm = ({ setIsFormOpen }) => {
         data.append("imageUrl", imageFile);
       }
 
+      console.log(data);
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/createbooking`,
         data,
@@ -125,26 +133,34 @@ const BookRepairForm = ({ setIsFormOpen }) => {
 
         <button
           type="button"
-          onClick={() => setIsFormOpen(false)}
+          onClick={() => setIsBookingFormOpen(false)}
           className="absolute right-3 top-4 z-20 rounded-full border border-white/10 bg-white/5 p-2.5 text-white transition hover:bg-white/10"
         >
           <FiX size={20} />
         </button>
 
         <div className="relative min-h-0 flex-1 overflow-y-auto">
-          <section className="relative p-4 sm:p-7 md:p-8 lg:p-9">
-            <div className="mb-4 flex items-center justify-between gap-4">
-              <div>
-                <p className="text-xs uppercase tracking-[0.35em] text-cyan-300">
-                  Repair Details
-                </p>
-                <h3 className="mt-1 text-xl font-semibold text-white sm:text-2xl">
-                  Tell us what needs fixing
-                </h3>
-              </div>
+          <section className="relative px-4 pt-4 pb-4 sm:px-7 sm:pt-7 sm:pb-5 md:px-8 md:pt-8 md:pb-5 lg:px-9 lg:pt-9 lg:pb-5">
+            <div className="mb-1">
+              <p className="text-xs uppercase tracking-[0.35em] text-cyan-300">
+                Repair Details
+              </p>
+
+              <h3 className="mt-1 text-xl font-semibold text-white sm:text-2xl">
+                Tell us what needs fixing
+              </h3>
+
+              {bookingData?.title && (
+                <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-500/10 px-3 py-1.5">
+                  <span className="h-2 w-2 rounded-full bg-cyan-400" />
+                  <span className="text-xs font-medium text-cyan-300">
+                    {bookingData.title}
+                  </span>
+                </div>
+              )}
             </div>
 
-            <form className="space-y-1 sm:space-y-2" onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit}>
               <div className="grid gap-4 grid-cols-2">
                 <label className="block min-w-0 space-y-1">
                   <span className="text-sm text-slate-300">Full Name</span>
@@ -174,7 +190,9 @@ const BookRepairForm = ({ setIsFormOpen }) => {
               </div>
 
               <label className="block min-w-0 space-y-1">
-                <span className="text-sm text-slate-300">Device Type</span>
+                <span className="text-sm text-slate-300">
+                  {bookingData?.title ? "Company Name" : "Device Type"}
+                </span>
                 <input
                   type="text"
                   name="deviceType"
@@ -194,7 +212,7 @@ const BookRepairForm = ({ setIsFormOpen }) => {
                   name="issueDescription"
                   value={formData.issueDescription}
                   onChange={handChange}
-                  className="block w-full min-w-0 resize-none rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 text-base text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-400/70 focus:bg-white/[0.07] focus:shadow-[0_0_0_4px_rgba(34,211,238,0.08)] min-h-[80px] sm:min-h-[110px]"
+                  className=" block  w-full min-w-0 resize-none rounded-2xl border border-white/10 bg-white/5 px-4 pt-1 text-base text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-400/70 focus:bg-white/[0.07] focus:shadow-[0_0_0_4px_rgba(34,211,238,0.08)] min-h-[80px] sm:min-h-[110px] [&::-webkit-scrollbar]:hidden "
                   placeholder="Tell us what is the issue, when it occurred, and any visible symptoms."
                 />
               </label>
@@ -234,28 +252,29 @@ const BookRepairForm = ({ setIsFormOpen }) => {
                 </label>
               </div>
 
-              <div className="flex flex-col gap-3 pt-3 sm:flex-row">
+              <div className="flex flex-col gap-2 pt-3 sm:flex-row">
                 {isAuthenticated ? (
                   <>
                     <button
                       type="submit"
                       disabled={loading}
-                      className="inline-flex flex-1 gap-2 items-center justify-center rounded-2xl bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-500 px-5 py-2.5 font-semibold tracking-wide text-white shadow-[0_14px_30px_rgba(37,99,235,0.28)] transition hover:brightness-110"
+                      className="inline-flex flex-1 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-500 px-4 py-2 text-sm font-medium text-white shadow-[0_14px_30px_rgba(37,99,235,0.28)] transition hover:brightness-110 disabled:opacity-70"
                     >
                       {loading ? (
                         <>
-                          <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
                           Submitting...
                         </>
                       ) : (
                         "Submit Booking"
                       )}
                     </button>
+
                     {!loading && (
                       <button
                         type="button"
-                        onClick={() => setIsFormOpen(false)}
-                        className="w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-2.5 font-medium text-slate-200 transition hover:bg-white/10 sm:w-[160px]"
+                        onClick={() => setIsBookingFormOpen(false)}
+                        className="w-full sm:w-[140px] rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-200 transition hover:bg-white/10"
                       >
                         Cancel
                       </button>
@@ -265,7 +284,7 @@ const BookRepairForm = ({ setIsFormOpen }) => {
                   <button
                     type="button"
                     onClick={openAuthModal}
-                    className="inline-flex flex-1 items-center justify-center rounded-2xl bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-500 px-5 py-2.5 font-semibold tracking-wide text-white shadow-[0_14px_30px_rgba(37,99,235,0.28)] transition hover:brightness-110"
+                    className="inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-500 px-4 py-2 text-sm font-medium text-white shadow-[0_14px_30px_rgba(37,99,235,0.28)] transition hover:brightness-110"
                   >
                     Login to Submit
                   </button>

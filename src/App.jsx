@@ -6,8 +6,11 @@ import Services from "./Pages/Services";
 import ServiceDetail from "./Pages/ServiceDetail";
 import Mybookings from "./Pages/Mybookings";
 import BookingDetails from "./Pages/BookingDetails";
+import BookRepairForm from "./Components/BookRepairForm";
+import { useBookingModal } from "./context/BookingModalContext";
 
 const App = () => {
+  const { isBookingFormOpen } = useBookingModal();
   return (
     <>
       <div
@@ -25,6 +28,7 @@ const App = () => {
           <Route path="/my-bookings" element={<Mybookings />} />
           <Route path="/bookings/:id" element={<BookingDetails />} />
         </Routes>
+        {isBookingFormOpen && <BookRepairForm />}
       </div>
     </>
   );

@@ -1,17 +1,19 @@
-import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useEffect, useRef } from "react";
+import { Link, useParams } from "react-router-dom";
 import { IoIosArrowBack } from "react-icons/io";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useModal } from "../context/AuthModalContext.jsx";
 import { useServices } from "../context/ServiceContext.jsx";
+import { useBookingModal } from "../context/BookingModalContext.jsx";
+import AuthModal from "../Components/Auth/AuthModal.jsx";
 
 const ServiceDetails = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { services } = useServices();
   const { isAuthenticated } = useAuth();
   const { serviceId } = useParams();
-  const [isBooking, setIsBooking] = useState(false);
   const bookingTimeoutRef = useRef(null);
+  const { setIsBookingFormOpen, setBookingData } = useBookingModal();
   const { openAuthModal } = useModal();
 
   useEffect(() => {
@@ -31,26 +33,6 @@ const ServiceDetails = () => {
       </div>
     );
   }
-
-  const handleBooking = () => {
-    const booking = {
-      serviceName: service.title,
-      estimatedCost: service.price,
-      serviceTime: service.serviceTime,
-      bookingId: `RMX-${Math.floor(1000 + Math.random() * 9000)}`,
-      customerName: "Guest Customer",
-      customerEmail: "guest@repairmate.demo",
-      issue: service.issues?.[0] || "General repair request",
-      status: "Pending",
-      createdAt: new Date().toLocaleString(),
-    };
-
-    setIsBooking(true);
-
-    bookingTimeoutRef.current = window.setTimeout(() => {
-      navigate("/booking-success", { state: booking });
-    }, 1400);
-  };
 
   return (
     <div className="min-h-screen  px-4 py-10 text-white">
@@ -111,11 +93,16 @@ const ServiceDetails = () => {
         {isAuthenticated ? (
           <div className="mt-10 text-center">
             <button
-              onClick={handleBooking}
-              disabled={isBooking}
+              onClick={() => {
+                setBookingData({
+                  title: service.title,
+                  serviceTime: service.serviceTime,
+                });
+                setIsBookingFormOpen(true);
+              }}
               className="rounded-full bg-indigo-600 px-8 py-3 font-semibold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:bg-indigo-500/70"
             >
-              {isBooking ? "Processing Booking..." : "Book this Service"}
+              Book this Service
             </button>
           </div>
         ) : (

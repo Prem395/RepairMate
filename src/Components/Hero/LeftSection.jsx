@@ -4,12 +4,14 @@ import { CiSearch } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import BookRepairForm from "../BookRepairForm.jsx";
 import { useServices } from "../../context/ServiceContext.jsx";
+import { useBookingModal } from "../../context/BookingModalContext.jsx";
 
 const LeftSection = () => {
   const [openResults, setOpenResults] = useState(false);
   const { services } = useServices();
   const [query, setQuery] = useState("");
-  const [isFormOpen, setIsFormOpen] = useState(false);
+
+  const { setIsBookingFormOpen, setBookingData } = useBookingModal();
   const wrapperRef = useRef(null);
   const navigate = useNavigate();
 
@@ -43,7 +45,7 @@ const LeftSection = () => {
     const handleEscapeKey = (event) => {
       if (event.key === "Escape") {
         setOpenResults(false);
-        setIsFormOpen(false);
+        setIsBookingFormOpen(false);
       }
     };
 
@@ -54,7 +56,7 @@ const LeftSection = () => {
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("keydown", handleEscapeKey);
     };
-  }, []);
+  }, [setIsBookingFormOpen]);
 
   return (
     <div className="flex w-full flex-col gap-5 py-2 lg:w-1/2 lg:gap-6 lg:py-8">
@@ -138,12 +140,12 @@ const LeftSection = () => {
           </div>
         )}
       </div>
-
-      {isFormOpen && <BookRepairForm setIsFormOpen={setIsFormOpen} />}
-
       <div className="flex w-full flex-col gap-3 pt-1 sm:flex-row sm:flex-wrap">
         <button
-          onClick={() => setIsFormOpen(true)}
+          onClick={() => {
+            setBookingData(null);
+            setIsBookingFormOpen(true);
+          }}
           className="w-full rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white shadow-lg transition hover:bg-blue-700 sm:w-auto"
         >
           Book a Repair
