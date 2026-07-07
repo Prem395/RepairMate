@@ -25,8 +25,9 @@ const NavbarMobile = ({ onClose, toggleAuth, handleLogout }) => {
     visible: {
       x: 0,
       transition: {
-        duration: 0.3,
-        staggerChildren: 0.2,
+        duration: 0.25,
+        ease: "easeOut",
+        staggerChildren: 0.06,
       },
     },
   };
@@ -34,13 +35,13 @@ const NavbarMobile = ({ onClose, toggleAuth, handleLogout }) => {
   const itemVariants = {
     hidden: {
       opacity: 0,
-      x: 30,
+      x: 15,
     },
     visible: {
       opacity: 1,
       x: 0,
       transition: {
-        duration: 0.2,
+        duration: 0.18,
       },
     },
   };
