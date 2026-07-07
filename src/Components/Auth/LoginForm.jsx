@@ -20,7 +20,10 @@ const LoginForm = ({ onClose }) => {
       setUser(response.data);
       setIsAuthenticated(true);
 
-      successToast(`Welcome back, ${response.data.firstName}!`, "bottom-center");
+      successToast(
+        `Welcome back, ${response.data.firstName}!`,
+        "bottom-center",
+      );
       onClose();
       setFormData({
         email: "",
@@ -28,7 +31,7 @@ const LoginForm = ({ onClose }) => {
       });
     } catch (error) {
       console.log(error.response?.data);
-      errorToast("Something went wrong", error.response?.data?.message);
+      errorToast(error);
     } finally {
       setLoading(false);
     }
