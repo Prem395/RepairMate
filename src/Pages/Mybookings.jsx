@@ -1,17 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
 import Navbar from "../Components/Layouts/Navbar";
-import axios from "axios";
 import { gsap } from "gsap";
-import toast from "react-hot-toast";
 import {
   ChevronLeft,
   ChevronRight,
   ClipboardCopy,
+  Clock,
   X,
   XCircle,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useLocomotivePage } from "../hooks/useLocomotivePage";
+import { cancelBooking, getMyBookings } from "../api/bookingService";
+import { errorToast, successToast } from "../utils/toastConfig";
 
 const Mybookings = () => {
   const [bookings, setBookings] = useState([]);
@@ -45,29 +46,10 @@ const Mybookings = () => {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/bookings/my`,
-          {
-            withCredentials: true,
-          },
-        );
-
-        setBookings(res.data.booking);
-        // eslint-disable-next-line no-unused-vars
+        const res = await getMyBookings();
+        setBookings(res.booking);
       } catch (error) {
-        toast.error("Failed to load bookings", {
-          icon: "⚠️",
-          style: {
-            background: "rgba(255,255,255,0.08)",
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
-            color: "#fff",
-            border: "1px solid rgba(239,68,68,0.25)",
-            borderRadius: "18px",
-            padding: "14px 18px",
-            boxShadow: "0 8px 32px rgba(239,68,68,0.15)",
-          },
-        });
+        errorToast(error, "Failed to fetch bookings", "bottom-center");
       } finally {
         setLoading(false);
       }
@@ -78,51 +60,19 @@ const Mybookings = () => {
 
   const handleCancel = async (bookingId) => {
     try {
-      const res = await axios.patch(
-        `${import.meta.env.VITE_API_URL}/api/bookings/${bookingId}/cancel`,
-        {},
-        {
-          withCredentials: true,
-        },
-      );
+      const res = await cancelBooking(bookingId);
       setShowConfirmId(null);
 
-      const updatedBooking = res.data.booking;
-
+      const updatedBooking = res.booking;
       setBookings((prevBookings) =>
         prevBookings.map((booking) =>
           booking._id === updatedBooking._id ? updatedBooking : booking,
         ),
       );
 
-      toast.success("Booking cancelled successfully", {
-        icon: "✅",
-        style: {
-          background: "rgba(255,255,255,0.08)",
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
-          color: "#fff",
-          border: "1px solid rgba(255,255,255,0.12)",
-          borderRadius: "18px",
-          padding: "14px 18px",
-          boxShadow: "0 8px 32px rgba(59,130,246,0.18)",
-        },
-      });
+      successToast("Booking cancelled successfully", "bottom-center");
     } catch (error) {
-      console.log(error.response?.data);
-      toast.error(error.response?.data?.message || "Failed to cancel booking", {
-        icon: "⚠️",
-        style: {
-          background: "rgba(255,255,255,0.08)",
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
-          color: "#fff",
-          border: "1px solid rgba(239,68,68,0.25)",
-          borderRadius: "18px",
-          padding: "14px 18px",
-          boxShadow: "0 8px 32px rgba(239,68,68,0.15)",
-        },
-      });
+      errorToast(error, "Failed to cancel booking", "bottom-center");
     }
   };
 
@@ -246,21 +196,16 @@ const Mybookings = () => {
                       key={item._id}
                       className="relative w-full md:min-w-[450px] md:max-w-[450px] rounded-2xl overflow-hidden transition-all duration-300 "
                       style={{
-                        background:
-                          "linear-gradient(145deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.03) 100%)",
+                        background: "rgba(255,255,255,0.035)",
+                        backdropFilter: "blur(40px)",
+                        WebkitBackdropFilter: "blur(40px)",
+                        border: "1px solid rgba(255,255,255,0.09)",
                         boxShadow:
-                          "0 0 0 1px rgba(255,255,255,0.09), inset 0 1px 0 rgba(255,255,255,0.12)",
-                        backdropFilter: "blur(24px)",
+                          "0 8px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.08)",
                       }}
                     >
                       {/* Top shimmer line */}
-                      <div
-                        className="absolute top-0 left-0 right-0 h-px"
-                        style={{
-                          background:
-                            "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 40%, rgba(130,180,255,0.35) 60%, transparent 100%)",
-                        }}
-                      />
+                      <div className="absolute left-0 top-6 bottom-6 w-0.5 rounded-full opacity-60 bg-blue-600/50 " />
 
                       {/* Header */}
                       <div className="px-5 pt-6 pb-4 flex items-start justify-between gap-3">
@@ -275,7 +220,6 @@ const Mybookings = () => {
                         <span
                           className={`shrink-0 px-3 flex justify-center items-center gap-2 py-1.5 rounded-full border text-xs font-semibold tracking-wide ${statusStyle.color} ${statusStyle.bg} ${statusStyle.border}`}
                         >
-                          {" "}
                           {item.status}
                         </span>
                       </div>
@@ -402,6 +346,7 @@ const Mybookings = () => {
                       </div>
 
                       {/* Footer */}
+
                       {canCancel ? (
                         showConfirmId === item._id ? (
                           <div className="h-[70px] flex items-center justify-end py-3 px-4  gap-2 shrink-0">

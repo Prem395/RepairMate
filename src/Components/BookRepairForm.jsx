@@ -9,17 +9,17 @@ import {
 } from "react-icons/fi";
 import { useAuth } from "../context/AuthContext";
 import { useModal } from "../context/AuthModalContext";
-import axios from "axios";
 import toast from "react-hot-toast";
 import { useBookingModal } from "../context/BookingModalContext";
+import { createBooking } from "../api/bookingService";
+import { errorToast, successToast } from "../utils/toastConfig";
 
 const BookRepairForm = () => {
   const { isAuthenticated } = useAuth();
   const { openAuthModal } = useModal();
   const [loading, setLoading] = useState(false);
   const modalRef = useRef();
-  const { setIsBookingFormOpen, bookingData } =
-    useBookingModal();
+  const { setIsBookingFormOpen, bookingData } = useBookingModal();
   const [imageFile, setimageFile] = useState(null);
   const [formData, setformData] = useState({
     customerName: "",
@@ -70,13 +70,7 @@ const BookRepairForm = () => {
       }
 
       console.log(data);
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/createbooking`,
-        data,
-        {
-          withCredentials: true,
-        },
-      );
+      const response = await createBooking(data);
 
       setformData({
         customerName: "",
@@ -85,33 +79,9 @@ const BookRepairForm = () => {
         issueDescription: "",
         imageUrl: "",
       });
-      toast.success(response.data.message, {
-        icon: "✅",
-        position: "top-center",
-        style: {
-          background: "rgba(255,255,255,0.08)",
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
-          color: "#fff",
-          border: "1px solid rgba(250,250,250,0.20)",
-          borderRadius: "18px",
-          padding: "12px 20px",
-        },
-      });
+      successToast(response.message || "Booking created successfully");
     } catch (error) {
-      toast.error(error.response?.data?.message || "Something went wrong", {
-        icon: "⚠️",
-        style: {
-          background: "rgba(255,255,255,0.08)",
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
-          color: "#fff",
-          border: "1px solid rgba(239,68,68,0.25)",
-          borderRadius: "18px",
-          padding: "14px 18px",
-          boxShadow: "0 8px 32px rgba(239,68,68,0.15)",
-        },
-      });
+      errorToast(error.response?.data?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }

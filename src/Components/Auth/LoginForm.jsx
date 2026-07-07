@@ -1,7 +1,7 @@
-import axios from "axios";
 import React, { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
-import toast from "react-hot-toast";
+import { LogInUser } from "../../api/authService";
+import { errorToast, successToast } from "../../utils/toastConfig";
 
 const LoginForm = ({ onClose }) => {
   const [loading, setLoading] = useState(false);
@@ -14,31 +14,13 @@ const LoginForm = ({ onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/auth/login`,
-        formData,
-        {
-          withCredentials: true,
-        },
-      );
-      setUser(response.data.data);
+      const response = await LogInUser(formData);
+      console.log(response);
+      setUser(response.data);
       setIsAuthenticated(true);
 
-      toast.success(`Welcome back, ${response.data.data.firstName}!`, {
-        icon: "👋",
-        style: {
-          background: "rgba(255,255,255,0.08)",
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
-          color: "#fff",
-          border: "1px solid rgba(255,255,255,0.12)",
-          borderRadius: "18px",
-          padding: "14px 18px",
-          boxShadow: "0 8px 32px rgba(59,130,246,0.18)",
-        },
-      });
+      successToast(`Welcome back, ${response.data.firstName}!`, "bottom-center");
       onClose();
       setFormData({
         email: "",
@@ -46,19 +28,7 @@ const LoginForm = ({ onClose }) => {
       });
     } catch (error) {
       console.log(error.response?.data);
-      toast.error(error.response?.data?.message || "Something went wrong", {
-        icon: "⚠️",
-        style: {
-          background: "rgba(255,255,255,0.08)",
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
-          color: "#fff",
-          border: "1px solid rgba(239,68,68,0.25)",
-          borderRadius: "18px",
-          padding: "14px 18px",
-          boxShadow: "0 8px 32px rgba(239,68,68,0.15)",
-        },
-      });
+      errorToast("Something went wrong", error.response?.data?.message);
     } finally {
       setLoading(false);
     }

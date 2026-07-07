@@ -1,7 +1,7 @@
-import axios from "axios";
-import React, { useState } from "react";
-import toast from "react-hot-toast";
+import { useState } from "react";
 import { CgPassword } from "react-icons/cg";
+import { LogInUser, signupUser } from "../../api/authService";
+import { errorToast, successToast } from "../../utils/toastConfig";
 
 const SignUpForm = ({ setMode }) => {
   const [loading, setLoading] = useState(false);
@@ -23,19 +23,7 @@ const SignUpForm = ({ setMode }) => {
     try {
       setLoading(true);
       if (formData.password !== formData.confirmPassword) {
-        return toast.error("Passwords does not match", {
-          icon: "⚠️",
-          position: "top-center",
-          style: {
-            background: "rgba(255,255,255,0.08)",
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
-            color: "#fff",
-            border: "1px solid rgba(250,250,250,0.20)",
-            borderRadius: "18px",
-            padding: "12px 20px",
-          },
-        });
+        return errorToast("Passwords do not match");
       }
       const payLoad = {
         firstName: formData.firstName,
@@ -43,24 +31,10 @@ const SignUpForm = ({ setMode }) => {
         email: formData.email,
         password: formData.password,
       };
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/auth/signup`,
-        payLoad,
-      );
-      console.log(response.data);
-      toast.success("Account created successfully", {
-        icon: "✅",
-        position: "top-center",
-        style: {
-          background: "rgba(255,255,255,0.08)",
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
-          color: "#fff",
-          border: "1px solid rgba(250,250,250,0.20)",
-          borderRadius: "18px",
-          padding: "12px 20px",
-        },
-      });
+      const res = await signupUser(payLoad);
+      console.log(res);
+
+      successToast("Account created successfully");
       setMode("signin");
 
       setformData({
@@ -71,20 +45,7 @@ const SignUpForm = ({ setMode }) => {
         confirmPassword: "",
       });
     } catch (error) {
-      toast.error(error.response?.data?.message || "Something went wrong", {
-        icon: "⚠️",
-        position: "top-center",
-        style: {
-          background: "rgba(255,255,255,0.08)",
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
-          color: "#fff",
-          border: "1px solid rgba(250,250,250,0.20)",
-          borderRadius: "18px",
-          padding: "12px 20px",
-          boxShadow: "0 5px 32px rgba(250,250,250,0.30)",
-        },
-      });
+      errorToast(error);
     } finally {
       setLoading(false);
     }

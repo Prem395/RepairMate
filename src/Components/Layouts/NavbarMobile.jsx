@@ -1,115 +1,188 @@
 import { FiX } from "react-icons/fi";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { House, User, Wrench } from "lucide-react";
+
+// eslint-disable-next-line no-unused-vars
+import { motion } from "framer-motion";
+import {
+  FcAbout,
+  FcBarChart,
+  FcBriefcase,
+  FcBusinessman,
+  FcBusinesswoman,
+  FcFinePrint,
+  FcHome,
+  FcSupport,
+} from "react-icons/fc";
 
 const NavbarMobile = ({ onClose, toggleAuth, handleLogout }) => {
-  const navigate = useNavigate();
-
   const { user, isAuthenticated } = useAuth();
+
+  const containerVariants = {
+    hidden: {
+      x: "100%",
+    },
+    visible: {
+      x: 0,
+      transition: {
+        duration: 0.3,
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: {
+      opacity: 0,
+      x: 30,
+    },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: {
+        duration: 0.4,
+      },
+    },
+  };
 
   return (
     <div className="fixed inset-0 z-[999] flex justify-end bg-black/50 backdrop-blur-sm">
-      <div className="relative flex h-full w-[300px] flex-col border-l border-white/10 bg-[#0b1020]/95 px-6 py-8 text-white backdrop-blur-xl">
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute right-5 top-5 text-white transition hover:text-blue-400"
-        >
-          <FiX size={24} />
-        </button>
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        exit="hidden"
+        // className="mt-14 flex flex-col //"
+        className="relative flex h-full w-[85%] max-w-sm flex-col border-l border-white/10 bg-[#0b1020]/95 px-6 py-8 text-white backdrop-blur-xl"
+      >
+        {/* General */}
+        <div>
+          <p className="mb-4 text-xs uppercase tracking-[0.2em] text-slate-500">
+            General
+          </p>
+          <button
+            type="button"
+            onClick={onClose}
+            className="absolute right-5 top-5 text-white transition hover:text-blue-400"
+          >
+            <FiX size={24} />
+          </button>
 
-        {/* Nav Links */}
-        <div className="mt-14 flex flex-col gap-5">
-          <NavLink to="/" end onClick={onClose}>
-            <span className="flex items-center gap-2">
-              <House />
-              Home
-            </span>
-          </NavLink>
+          <div className="space-y-4">
+            <motion.div variants={itemVariants}>
+              <NavLink
+                to="/"
+                end
+                onClick={onClose}
+                className="flex items-center gap-3"
+              >
+                {/* <House size={20} /> */}
+                <FcHome size={20} />
+                <span>Home</span>
+              </NavLink>
+            </motion.div>
 
-          <NavLink to="/about" onClick={onClose}>
-            <span className="flex items-center gap-2">
-              <User />
-              About
-            </span>
-          </NavLink>
+            <motion.div variants={itemVariants}>
+              <NavLink
+                to="/services"
+                onClick={onClose}
+                className="flex items-center gap-3"
+              >
+                <FcSupport size={20} />
+                <span>Services</span>
+              </NavLink>
+            </motion.div>
 
-          <NavLink to="/services" onClick={onClose}>
-            <span className="flex items-center gap-2">
-              <Wrench />
-              Services
-            </span>
-          </NavLink>
+            <motion.div variants={itemVariants}>
+              <NavLink
+                to="/about"
+                onClick={onClose}
+                className="flex items-center gap-3"
+              >
+                <FcAbout size={20} />
+                <span>About us</span>
+              </NavLink>
+            </motion.div>
+          </div>
         </div>
+
+        {/* Account */}
+        {isAuthenticated && user && (
+          <div className="mt-8 border-t border-white/10 pt-6">
+            <p className="mb-4 text-xs uppercase tracking-[0.2em] text-slate-500">
+              Account
+            </p>
+
+            <div className="space-y-4">
+              <motion.div variants={itemVariants}>
+                <NavLink
+                  to="/profile"
+                  onClick={onClose}
+                  className="flex items-center gap-3"
+                >
+                  <FcBusinessman size={20} />
+                  <span>My Profile</span>
+                </NavLink>
+              </motion.div>
+
+              <motion.div variants={itemVariants}>
+                <NavLink
+                  to="/my-bookings"
+                  onClick={onClose}
+                  className="flex items-center gap-3"
+                >
+                  <FcFinePrint size={20} />
+                  <span>My Bookings</span>
+                </NavLink>
+              </motion.div>
+            </div>
+          </div>
+        )}
+
+        {/* Admin */}
+        {isAuthenticated && user?.role === "admin" && (
+          <div className="mt-8 border-t border-white/10 pt-6">
+            <p className="mb-4 text-xs uppercase tracking-[0.2em] text-slate-500">
+              Admin
+            </p>
+
+            <motion.div variants={itemVariants}>
+              <NavLink
+                to="/all-bookings"
+                onClick={onClose}
+                className="flex items-center gap-3"
+              >
+                <FcBarChart size={20} />
+                <span>Dashboard</span>
+              </NavLink>
+            </motion.div>
+          </div>
+        )}
 
         {/* User Section */}
         {isAuthenticated && user ? (
-          <>
-            <div className="border-t border-white/10 mt-5" />
-            <div className="mt-8 rounded-2xl border border-white/10 bg-white/5 p-4">
-              <p className="text-xs uppercase tracking-wider text-slate-500">
-                Signed in as
-              </p>
-
-              <h3 className="mt-2 text-lg font-semibold text-blue-300">
-                {user.firstName} {user.lastName}
-              </h3>
-
-              <p className="mt-1 truncate text-xs text-slate-400">
-                {user.email}
-              </p>
-
-              <div className="mt-5 flex flex-col gap-2">
-                <button
-                  onClick={() => {
-                    onClose();
-                    navigate("/my-bookings");
-                  }}
-                  className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm transition hover:bg-white/10"
-                >
-                  📋 My Bookings
-                </button>
-
-                <button
-                  onClick={() => {
-                    onClose();
-                    handleLogout();
-                  }}
-                  className="w-full rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300 transition hover:bg-red-500/20"
-                >
-                  🚪 Logout
-                </button>
-              </div>
-            </div>
-          </>
+          <div className="mt-8 border-t border-white/10 pt-6">
+            <button
+              onClick={() => {
+                handleLogout();
+                onClose();
+              }}
+              className="w-full rounded-xl border border-red-600/20 bg-red-600/10 px-4 py-3 text-sm text-white transition hover:bg-red-600/20"
+            >
+              Log out
+            </button>
+          </div>
         ) : (
           <div className="mt-8 border-t border-white/10 pt-6">
             <button
               onClick={toggleAuth}
               className="w-full rounded-xl border border-blue-600/20 bg-blue-600/10 px-4 py-3 text-sm text-white transition hover:bg-blue-600/20"
             >
-             Log in
+              Log in
             </button>
           </div>
         )}
-
-        {/* Footer */}
-        <div className="mt-auto border-t border-white/10 pt-5">
-          <p className="text-xs uppercase tracking-[0.2em] text-slate-500">
-            Need Help?
-          </p>
-
-          <p className="mt-2 text-sm text-slate-300">Contact Support</p>
-
-          <a
-            href="mailto:support@repairmate.com"
-            className="text-sm text-blue-300 transition hover:text-blue-200"
-          >
-            support@repairmate.com
-          </a>
-        </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

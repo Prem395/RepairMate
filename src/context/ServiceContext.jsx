@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import axios from "axios";
+import { fetchAllServices } from "../api/serviceService";
 
 const ServiceContext = createContext();
 
@@ -10,11 +10,9 @@ export const ServiceProvider = ({ children }) => {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/services`
-        );
+        const res = await fetchAllServices();
 
-        setServices(res.data.services);
+        setServices(res.services);
       } catch (error) {
         console.log(error);
       } finally {

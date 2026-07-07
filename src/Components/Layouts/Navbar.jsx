@@ -1,19 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
-import { FcElectricalSensor } from "react-icons/fc";
+import { FcBarChart, FcElectricalSensor } from "react-icons/fc";
 import { NavLink, useNavigate } from "react-router-dom";
 import NavbarMobile from "./NavbarMobile";
 import AuthModal from "../Auth/AuthModal";
 import { useAuth } from "../../context/AuthContext";
-import axios from "axios";
 import {
   ChevronDown,
   ChevronUp,
   LogInIcon,
   UserCircleIcon,
 } from "lucide-react";
-import toast from "react-hot-toast";
+
 import { useModal } from "../../context/AuthModalContext";
+import { logoutUser } from "../../api/authService";
+import { errorToast, successToast } from "../../utils/toastConfig";
 
 const Navbar = () => {
   const { user, isAuthenticated, setIsAuthenticated, setUser } = useAuth();
@@ -29,32 +30,17 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/auth/logout`,
-        {},
-        { withCredentials: true },
-      );
+      const res = await logoutUser();
 
       console.log(res);
       setbookingModal(false);
       setIsAuthenticated(false);
       setUser(null);
-      toast.success(`You have been logged out.`, {
-        // icon: "",
-        icon: "✅",
-        style: {
-          background: "rgba(255,255,255,0.08)",
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
-          color: "#fff",
-          border: "1px solid rgba(255,255,255,0.12)",
-          borderRadius: "18px",
-          padding: "14px 18px",
-          boxShadow: "0 8px 32px rgba(59,130,246,0.18)",
-        },
-      });
+      successToast("Logged out successfully", "bottom-center");
+      navigate("/");
     } catch (error) {
       console.log(error.message);
+      errorToast("Something went wrong", error.message, "bottom-center");
     }
   };
 
@@ -90,13 +76,10 @@ const Navbar = () => {
             onClick={() => navigate("/")}
             className="flex items-center gap-2 sm:gap-3"
           >
-            <FcElectricalSensor
-              size={38}
-              className="mr-[-8px] sm:mr-[-10px] sm:text-[45px]"
-            />
+            <FcElectricalSensor className="mr-[-8px] size-8 sm:mr-[-10px] sm:text-[45px]" />
             <h1
               id="logo-text"
-              className="text-[1.95rem] font-semibold leading-none sm:text-2xl"
+              className="text-[20px] font-semibold leading-none sm:text-2xl"
             >
               Repair<span className="text-blue-400">Mate</span>
             </h1>
@@ -168,6 +151,18 @@ const Navbar = () => {
                         📋
                         <span>My Bookings</span>
                       </button>
+                      {user.role === "admin" && (
+                        <button
+                          onClick={() => {
+                            setbookingModal(false);
+                            navigate("/all-bookings");
+                          }}
+                          className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm text-slate-200 transition hover:bg-white/5"
+                        >
+                          <FcBarChart size={20} />
+                          <span>Dashboard</span>
+                        </button>
+                      )}
 
                       <button
                         onClick={handleLogout}
