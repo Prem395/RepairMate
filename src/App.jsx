@@ -8,6 +8,8 @@ import Mybookings from "./Pages/Mybookings";
 import BookRepairForm from "./Components/BookRepairForm";
 import { useBookingModal } from "./context/BookingModalContext";
 import AdminAllBookings from "./Pages/AdminAllBookings";
+import ProtectedRoute from "./Routes/ProtectedRoute";
+import AdminRoute from "./Routes/AdminRoute";
 
 const App = () => {
   const { isBookingFormOpen } = useBookingModal();
@@ -25,9 +27,23 @@ const App = () => {
           <Route path="/services" element={<Services />} />
           <Route path="/services/:serviceId" element={<ServiceDetail />} />
           <Route path="/booking-success" element={<BookingSuccess />} />
-          <Route path="/my-bookings" element={<Mybookings />} />
+          <Route
+            path="/my-bookings"
+            element={
+              <ProtectedRoute>
+                <Mybookings />
+              </ProtectedRoute>
+            }
+          />
 
-          <Route path="/all-bookings" element={<AdminAllBookings />} />
+          <Route
+            path="/all-bookings"
+            element={
+              <AdminRoute>
+                <AdminAllBookings />
+              </AdminRoute>
+            }
+          />
         </Routes>
         {isBookingFormOpen && <BookRepairForm />}
       </div>
