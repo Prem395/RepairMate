@@ -9,6 +9,10 @@ import {
   ChevronDown,
   ChevronUp,
   LogInIcon,
+  LogOut,
+  PenLine,
+  Plus,
+  SquarePen,
   UserCircleIcon,
 } from "lucide-react";
 
@@ -58,11 +62,18 @@ const Navbar = () => {
     };
   }, []);
 
-  const navItems = [
-    { label: "Home", to: "/", end: true },
-    { label: "About", to: "/about" },
-    { label: "Services", to: "/services" },
-  ];
+  const navItems =
+    user && user.role === "admin"
+      ? [
+          { label: "Home", to: "/", end: true },
+          { label: "Dashboard", to: "/all-bookings" },
+          { label: "Services", to: "/services" },
+        ]
+      : [
+          { label: "Home", to: "/", end: true },
+          { label: "About", to: "/about" },
+          { label: "Services", to: "/services" },
+        ];
 
   return (
     <>
@@ -85,37 +96,39 @@ const Navbar = () => {
             </h1>
           </button>
 
-          <div className="hidden items-center gap-3 rounded-full border border-white/10 bg-white/5 px-3 py-2 md:flex">
+          <div className="hidden items-center  md:flex">
             {navItems.map((item) => (
               <NavLink
                 key={item.to}
                 to={item.to}
                 end={item.end}
                 className={({ isActive }) =>
-                  isActive
-                    ? "rounded-full bg-white/10 px-4 py-2 font-semibold text-blue-300"
-                    : "rounded-full px-4 py-2 transition hover:bg-white/5 hover:text-blue-300"
+                  `relative px-4 py-2 rounded-full transition-all duration-300 ${
+                    isActive
+                      ? "text-white border-b-2 border-blue-500 drop-shadow-[0_0_8px_rgba(59,130,246,0.6)]"
+                      : "text-slate-300 hover:text-white"
+                  }`
                 }
               >
                 {item.label}
               </NavLink>
             ))}
           </div>
-          <div className="hidden md:flex items-center justify-end gap-3 w-[180px]">
+          <div className="hidden md:flex items-center justify-end gap-3 w-[180px] ">
             {isAuthenticated && user ? (
-              <div ref={menuRef} className=" relative">
+              <div ref={menuRef} className="relative">
                 <div
                   onClick={() => {
                     setbookingModal((prev) => !prev);
                   }}
-                  className=" flex  rounded-full border border-blue-500/20 bg-blue-500/10 px-4 py-2 hover:bg-blue-500/15 transition"
+                  className=" flex  rounded-full border border-blue-500/20 bg-blue-500/10 hover:bg-blue-500/15 transition sm:px-2 sm:py-1 md:px-2 md:py-1 lg:px-4 lg:py-2  items-center gap-1 cursor-pointer"
                 >
-                  <button className="text-sm  text-blue-300">
+                  <button className="text-sm text-blue-300">
                     <span
                       id="logo-text"
                       className="flex justify-center items-center gap-2 "
                     >
-                      <UserCircleIcon size={22} className="text-blue-300" />
+                      <UserCircleIcon className="text-blue-300 size-5 " />
                       {user.firstName}
                     </span>
                   </button>
@@ -139,28 +152,54 @@ const Navbar = () => {
                         {user.email}
                       </p>
                     </div>
-
                     <div className="p-2">
                       <button
                         onClick={() => {
-                          setbookingModal(false);
-                          navigate("/my-bookings");
+                          navigate("/my-profile");
                         }}
-                        className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm text-slate-200 transition hover:bg-white/5"
+                        className="mt-1 flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm text-slate-300 transition hover:bg-white/5"
                       >
-                        📋
-                        <span>My Bookings</span>
+                        <span className="flex items-center justify-center gap-2">
+                          <UserCircleIcon />
+                          My Profile
+                        </span>
                       </button>
-                      {user.role === "admin" && (
+                      {user.role === "admin" ? (
+                        <div>
+                          <button
+                            onClick={() => {
+                              setbookingModal(false);
+                              navigate("/create-service");
+                            }}
+                            className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm text-slate-200 transition hover:bg-white/5"
+                          >
+                            <PenLine />
+                            <span>Create Service</span>
+                          </button>
+
+                          <button
+                            onClick={() => {
+                              setbookingModal(false);
+                              navigate("/all-bookings");
+                            }}
+                            className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm text-slate-200 transition hover:bg-white/5"
+                          >
+                            <FcBarChart size={20} />
+                            <span>Dashboard</span>
+                          </button>
+                        </div>
+                      ) : (
                         <button
                           onClick={() => {
                             setbookingModal(false);
-                            navigate("/all-bookings");
+                            navigate("/my-bookings");
                           }}
                           className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm text-slate-200 transition hover:bg-white/5"
                         >
-                          <FcBarChart size={20} />
-                          <span>Dashboard</span>
+                          <span className="flex items-center justify-center gap-2">
+                            <SquarePen className="" />
+                            My Bookings
+                          </span>
                         </button>
                       )}
 
@@ -168,8 +207,10 @@ const Navbar = () => {
                         onClick={handleLogout}
                         className="mt-1 flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm text-slate-300 transition hover:bg-white/5"
                       >
-                        🚪
-                        <span>Logout</span>
+                        <span className="flex items-center justify-center gap-2">
+                          <LogOut />
+                          Logout
+                        </span>
                       </button>
                     </div>
                   </div>

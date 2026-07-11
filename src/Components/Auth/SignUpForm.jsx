@@ -121,7 +121,7 @@ const SignUpForm = ({ setMode }) => {
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded-2xl bg-sky-600 px-4 py-2.5 mt-4 flex items-center justify-center gap-2 disabled:opacity-70"
+          className="w-full shadow-[rgba(59,230,246,0.35)_0px_4px_16px_0px] rounded-2xl bg-sky-600 px-4 py-2.5 mt-4 flex items-center justify-center gap-2 disabled:opacity-70"
         >
           {loading ? (
             <>

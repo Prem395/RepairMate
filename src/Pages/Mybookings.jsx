@@ -76,6 +76,8 @@ const Mybookings = () => {
     }
   };
 
+  console.log(bookings);
+
   return (
     <div
       className="min-h-screen text-white pb-10"
@@ -240,9 +242,9 @@ const Mybookings = () => {
                                 "0 0 0 1px rgba(130,180,255,0.15), 0 6px 16px rgba(0,0,0,0.5)",
                             }}
                           >
-                            {item.deviceImage ? (
+                            {item.imageUrl ? (
                               <img
-                                src={item.deviceImage}
+                                src={item.imageUrl}
                                 alt="Device"
                                 className="w-full h-full object-cover"
                               />

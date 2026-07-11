@@ -1,6 +1,5 @@
 import { Route, Routes } from "react-router-dom";
 import AboutUs from "./Pages/AboutUs";
-import BookingSuccess from "./Pages/BookingSuccess";
 import Home from "./Pages/Home";
 import Services from "./Pages/Services";
 import ServiceDetail from "./Pages/ServiceDetail";
@@ -10,6 +9,9 @@ import { useBookingModal } from "./context/BookingModalContext";
 import AdminAllBookings from "./Pages/AdminAllBookings";
 import ProtectedRoute from "./Routes/ProtectedRoute";
 import AdminRoute from "./Routes/AdminRoute";
+import PageNotFound from "./Pages/PageNotFound";
+import CreateOrEditService from "./Pages/CreateOrEditService";
+
 
 const App = () => {
   const { isBookingFormOpen } = useBookingModal();
@@ -26,7 +28,22 @@ const App = () => {
           <Route path="/about" element={<AboutUs />} />
           <Route path="/services" element={<Services />} />
           <Route path="/services/:serviceId" element={<ServiceDetail />} />
-          <Route path="/booking-success" element={<BookingSuccess />} />
+          <Route
+            path="/create-service/:id"
+            element={
+              <AdminRoute>
+                <CreateOrEditService />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/create-service"
+            element={
+              <AdminRoute>
+                <CreateOrEditService />
+              </AdminRoute>
+            }
+          />
           <Route
             path="/my-bookings"
             element={
@@ -44,6 +61,7 @@ const App = () => {
               </AdminRoute>
             }
           />
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
         {isBookingFormOpen && <BookRepairForm />}
       </div>

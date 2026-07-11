@@ -27,6 +27,7 @@ export const ServiceProvider = ({ children }) => {
     <ServiceContext.Provider
       value={{
         services,
+        setServices,
         loading,
       }}
     >

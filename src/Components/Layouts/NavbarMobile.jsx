@@ -27,7 +27,7 @@ const NavbarMobile = ({ onClose, toggleAuth, handleLogout }) => {
       transition: {
         duration: 0.25,
         ease: "easeOut",
-        staggerChildren: 0.06,
+        staggerChildren: 0.15,
       },
     },
   };

@@ -64,15 +64,17 @@ const LeftSection = () => {
         Fast repair inquiries for appliances, gadgets, and home devices
       </div>
 
-      <Motion.h1
-        id="logo-text"
-        initial={{ opacity: 0, y: 28, filter: "blur(10px)" }}
-        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-        transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1], delay: 0.22 }}
-        className="mx-auto max-w-[530px] sm:max-w-none text-[2.8rem] sm:text-5xl lg:text-6xl xl:text-[80px] font-extralight leading-[0.9] text-white [text-shadow:0_0_12px_rgba(96,165,250,0.45),0_0_32px_rgba(59,130,246,0.28),0_0_54px_rgba(99,102,241,0.18)] select-none"
-      >
-        Premium Device Repair
-      </Motion.h1>
+      <div className="mr-auto max-w-[530px] sm:max-w-none">
+        <Motion.h1
+          id="logo-text"
+          initial={{ opacity: 0, y: 28, filter: "blur(10px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1], delay: 0.22 }}
+          className=" text-[2.8rem] sm:text-5xl lg:text-6xl xl:text-[80px] font-extralight leading-[0.9] text-white [text-shadow:0_0_12px_rgba(96,165,250,0.45),0_0_32px_rgba(59,130,246,0.28),0_0_54px_rgba(99,102,241,0.18)] select-none"
+        >
+          Premium Device Repair
+        </Motion.h1>
+      </div>
 
       <div
         ref={wrapperRef}
@@ -95,7 +97,8 @@ const LeftSection = () => {
             </div>
             <button
               type="submit"
-              className="mt-3 w-full rounded-xl bg-blue-700 px-4 py-2.5 text-sm font-medium transition hover:bg-blue-800 sm:mt-0 sm:ml-4 sm:w-auto sm:py-2"
+              className="mt-3 w-full rounded-xl bg-blue-600 shadow-[rgba(59,230,246,0.005)_0px_4px_16px_0px] px-4 py-2.5 text-sm font-medium transition hover:bg-blue-500 sm:mt-0 sm:ml-4 sm:w-auto sm:py-2"
+              // className="bg-blue-600 s w-[50%] py-3 rounded-lg text-sm"
             >
               Search
             </button>
@@ -146,7 +149,7 @@ const LeftSection = () => {
             setBookingData(null);
             setIsBookingFormOpen(true);
           }}
-          className="w-full rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white shadow-lg transition hover:bg-blue-700 sm:w-auto"
+          className="w-full rounded-lg bg-blue-600 shadow-[rgba(59,230,246,0.35)_0px_4px_16px_0px] px-4 py-2.5 text-sm font-medium text-white transition hover:bg-blue-700 sm:w-auto"
         >
           Book a Repair
         </button>

@@ -1,16 +1,19 @@
 import { useEffect, useRef } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { IoIosArrowBack } from "react-icons/io";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useModal } from "../context/AuthModalContext.jsx";
 import { useServices } from "../context/ServiceContext.jsx";
 import { useBookingModal } from "../context/BookingModalContext.jsx";
 import AuthModal from "../Components/Auth/AuthModal.jsx";
+import { Loader2, LucideLoader2, MoreHorizontal } from "lucide-react";
+import { deleteServiceById } from "../api/serviceService.js";
+import { successToast } from "../utils/toastConfig.js";
 
 const ServiceDetails = () => {
-  // const navigate = useNavigate();
-  const { services } = useServices();
-  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+  const { services, setServices } = useServices();
+  const { isAuthenticated, user } = useAuth();
   const { serviceId } = useParams();
   const bookingTimeoutRef = useRef(null);
   const { setIsBookingFormOpen, setBookingData } = useBookingModal();
@@ -19,6 +22,7 @@ const ServiceDetails = () => {
   useEffect(() => {
     return () => {
       if (bookingTimeoutRef.current) {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         window.clearTimeout(bookingTimeoutRef.current);
       }
     };
@@ -28,23 +32,60 @@ const ServiceDetails = () => {
 
   if (!service) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-black text-white">
-        <p className="text-xl">Service not found</p>
+      <div className="flex min-h-screen items-center justify-center text-white gap-2">
+        <LucideLoader2 size={40} className="animate-spin" />
+        Loading service details...
       </div>
     );
   }
 
+  const handleDeleteService = async (serviceId) => {
+    try {
+      const res = await deleteServiceById(serviceId);
+      console.log(res);
+      navigate("/services");
+      successToast("Service deleted successfully!", "bottom-center");
+      setServices((prev) =>
+        prev.filter((service) => service._id !== serviceId),
+      );
+    } catch (error) {
+      console.error("Error deleting service:", error);
+    }
+  };
+
+  const handleEditService = (serviceId) => {
+    navigate(`/create-service/${serviceId}`);
+  };
+
   return (
     <div className="min-h-screen  px-4 py-10 text-white">
-      <div className="mx-auto max-w-4xl rounded-2xl bg-white/10 p-8 shadow-xl backdrop-blur-lg">
-        <Link
-          to="/services"
-          className="mb-6 flex items-center justify-start gap-1 text-lg text-white hover:text-black/50"
-        >
-          <IoIosArrowBack size={22} className="hover:text-black/50" /> Back to
-          Services
-        </Link>
+      <div className="mx-auto max-w-4xl rounded-2xl bg-blue-900/10 border border-white/10 p-8 shadow-xl backdrop-blur-lg">
+        <div className="flex  justify-between items-center">
+          <Link
+            to="/services"
+            className=" flex items-center justify-start gap-1 text-base text-slate-200 hover:text-slate-400"
+          >
+            <IoIosArrowBack size={22} className="hover:text-black/50" /> Back to
+            Services
+          </Link>
+          {isAuthenticated && user?.role === "admin" && (
+            <div className="flex gap-2">
+              <button
+                onClick={() => handleEditService(service._id)}
+                className="px-3 py-1.5 rounded-lg border border-white/10 hover:bg-white/10"
+              >
+                Edit
+              </button>
 
+              <button
+                onClick={() => handleDeleteService(service._id)}
+                className="px-3 py-1.5 rounded-lg border border-red-500/20 text-red-400 hover:bg-red-500/10"
+              >
+                Delete
+              </button>
+            </div>
+          )}
+        </div>
         <div className="mb-8 text-center">
           <img
             src={service.icon}
@@ -91,7 +132,7 @@ const ServiceDetails = () => {
         </div>
 
         {isAuthenticated ? (
-          <div className="mt-10 text-center">
+          <div className="mt-10 text-center flex justify-center">
             <button
               onClick={() => {
                 setBookingData({
@@ -100,7 +141,7 @@ const ServiceDetails = () => {
                 });
                 setIsBookingFormOpen(true);
               }}
-              className="rounded-full bg-indigo-600 px-8 py-3 font-semibold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:bg-indigo-500/70"
+              className="bg-blue-600 shadow-[rgba(59,230,246,0.35)_0px_4px_16px_0px] w-[50%] py-3 rounded-lg text-sm"
             >
               Book this Service
             </button>
@@ -109,7 +150,7 @@ const ServiceDetails = () => {
           <div className="mt-10 text-center">
             <button
               onClick={openAuthModal}
-              className="rounded-full bg-indigo-600 px-8 py-3 font-semibold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:bg-indigo-500/70"
+              className="bg-blue-600 shadow-[rgba(59,230,246,0.35)_0px_4px_16px_0px] w-[50%] py-3 rounded-lg text-sm"
             >
               Login to Book
             </button>
