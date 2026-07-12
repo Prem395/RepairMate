@@ -149,9 +149,9 @@ const ServiceDetails = () => {
                 });
                 setIsBookingFormOpen(true);
               }}
-              className="bg-blue-600 shadow-[rgba(59,230,246,0.35)_0px_4px_16px_0px] w-[50%] py-3 rounded-lg text-sm flex justify-center items-center gap-2"
+              className="bg-blue-600 shadow-[rgba(59,230,246,0.35)_0px_4px_16px_0px] w-[50%] py-3 rounded-lg text-sm "
             >
-              <Book size={18} /> Book this Service
+              Book this Service
             </button>
           </div>
         ) : (
