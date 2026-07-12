@@ -12,7 +12,6 @@ import AdminRoute from "./Routes/AdminRoute";
 import PageNotFound from "./Pages/PageNotFound";
 import CreateOrEditService from "./Pages/CreateOrEditService";
 
-
 const App = () => {
   const { isBookingFormOpen } = useBookingModal();
   return (

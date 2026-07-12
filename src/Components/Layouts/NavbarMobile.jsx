@@ -14,6 +14,8 @@ import {
   FcHome,
   FcSupport,
 } from "react-icons/fc";
+import { LogIn, LogOut } from "lucide-react";
+import { CgLogIn } from "react-icons/cg";
 
 const NavbarMobile = ({ onClose, toggleAuth, handleLogout }) => {
   const { user, isAuthenticated } = useAuth();
@@ -117,17 +119,6 @@ const NavbarMobile = ({ onClose, toggleAuth, handleLogout }) => {
             <div className="space-y-4">
               <motion.div variants={itemVariants}>
                 <NavLink
-                  to="/profile"
-                  onClick={onClose}
-                  className="flex items-center gap-3"
-                >
-                  <FcBusinessman size={20} />
-                  <span>My Profile</span>
-                </NavLink>
-              </motion.div>
-
-              <motion.div variants={itemVariants}>
-                <NavLink
                   to="/my-bookings"
                   onClick={onClose}
                   className="flex items-center gap-3"
@@ -168,18 +159,18 @@ const NavbarMobile = ({ onClose, toggleAuth, handleLogout }) => {
                 handleLogout();
                 onClose();
               }}
-              className="w-full rounded-xl border border-red-600/20 bg-red-600/10 px-4 py-3 text-sm text-white transition hover:bg-red-600/20"
+              className="w-full rounded-xl border border-red-600/20 bg-red-600/10 px-4 py-3 text-sm text-white transition hover:bg-red-600/20 flex justify-center items-center gap-2"
             >
-              Log out
+              <LogOut size={18} /> Log out
             </button>
           </div>
         ) : (
           <div className="mt-8 border-t border-white/10 pt-6">
             <button
               onClick={toggleAuth}
-              className="w-full rounded-xl border border-blue-600/20 bg-blue-600/10 px-4 py-3 text-sm text-white transition hover:bg-blue-600/20"
+              className="w-full rounded-xl border border-blue-600/20 bg-blue-600/10 px-4 py-3 text-sm text-white transition hover:bg-blue-600/20 flex justify-center items-center gap-2"
             >
-              Log in
+             <LogIn size={18} /> Log in
             </button>
           </div>
         )}

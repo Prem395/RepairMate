@@ -5,6 +5,15 @@ import { useLocomotivePage } from "../hooks/useLocomotivePage";
 
 const AboutUs = () => {
   const scrollRef = useLocomotivePage();
+
+  const style = {
+    background: "rgba(255, 255, 255, 0.04)",
+    backdropFilter: "blur(20px)",
+    WebkitBackdropFilter: "blur(20px)",
+    border: "1px solid rgba(255, 255, 255, 0.08)",
+    boxShadow:
+      "0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.06)",
+  };
   const team = [
     {
       name: "Julity C06",
@@ -24,13 +33,13 @@ const AboutUs = () => {
   ];
 
   return (
-    <section className="min-h-screen w-full  text-white">
+    <section className="min-h-screen w-full ">
       <Navbar />
 
       <div
         ref={scrollRef}
         data-scroll-container
-        className="px-6 py-10 max-w-7xl mx-auto"
+        className="px-6 py-10 max-w-7xl mx-auto "
       >
         {/* Heading */}
         <h1 className="text-4xl font-bold text-center mb-10">
@@ -39,14 +48,14 @@ const AboutUs = () => {
 
         {/* Our Story + Mission */}
         <div className="grid md:grid-cols-2 gap-8 mb-12">
-          <div className="bg-white/10 border border-white/10 rounded-xl p-6 backdrop-blur-sm">
+          <div style={style} className="rounded-xl p-6 ">
             <h2 className="text-xl font-semibold mb-2">Our Story</h2>
             <p>
               RepairMate was born to simplify home appliance repair. We connect
               users to reliable, verified technicians within minutes.
             </p>
           </div>
-          <div className="bg-white/10 border border-white/10 rounded-xl p-6 backdrop-blur-sm">
+          <div style={style} className=" rounded-xl p-6 ">
             <h2 className="text-xl font-semibold mb-2">Our Mission</h2>
             <p>
               To make repair services affordable, trustworthy, and fast. We aim
@@ -61,7 +70,8 @@ const AboutUs = () => {
           {team.map((member, index) => (
             <div
               key={index}
-              className="bg-white/10 p-4 rounded-xl text-center shadow border border-white/10 backdrop-blur-sm"
+              style={style}
+              className=" p-4 rounded-xl text-center shadow "
             >
               <img
                 src={member.img}
@@ -80,7 +90,7 @@ const AboutUs = () => {
 
         {/* Contact Us */}
         <h2 className="text-2xl font-semibold mb-4">Contact Us</h2>
-        <div className="bg-white/10 border border-white/10 p-6 rounded-xl text-center backdrop-blur-sm">
+        <div style={style} className=" p-6 rounded-xl text-center ">
           <p>
             Email:{" "}
             <a className="underline" href="mailto:repair@repairmate.com">

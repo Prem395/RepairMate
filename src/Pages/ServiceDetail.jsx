@@ -6,7 +6,14 @@ import { useModal } from "../context/AuthModalContext.jsx";
 import { useServices } from "../context/ServiceContext.jsx";
 import { useBookingModal } from "../context/BookingModalContext.jsx";
 import AuthModal from "../Components/Auth/AuthModal.jsx";
-import { Loader2, LucideLoader2, MoreHorizontal } from "lucide-react";
+import {
+  Book,
+  Loader2,
+  LucideLoader2,
+  MoreHorizontal,
+  PenIcon,
+  Trash2,
+} from "lucide-react";
 import { deleteServiceById } from "../api/serviceService.js";
 import { successToast } from "../utils/toastConfig.js";
 
@@ -60,27 +67,28 @@ const ServiceDetails = () => {
   return (
     <div className="min-h-screen  px-4 py-10 text-white">
       <div className="mx-auto max-w-4xl rounded-2xl bg-blue-900/10 border border-white/10 p-8 shadow-xl backdrop-blur-lg">
-        <div className="flex  justify-between items-center">
+        <div className="flex justify-between items-center mb-6 gap-3">
           <Link
             to="/services"
-            className=" flex items-center justify-start gap-1 text-base text-slate-200 hover:text-slate-400"
+            className="flex items-center bg-white/10 justify-center  text-base text-slate-200 hover:bg-white/20 px-2 py-2 rounded-md"
           >
-            <IoIosArrowBack size={22} className="hover:text-black/50" /> Back to
-            Services
+            <IoIosArrowBack size={20} />
           </Link>
           {isAuthenticated && user?.role === "admin" && (
             <div className="flex gap-2">
               <button
                 onClick={() => handleEditService(service._id)}
-                className="px-3 py-1.5 rounded-lg border border-white/10 hover:bg-white/10"
+                className="px-3 py-1.5 rounded-lg border border-white/10 hover:bg-white/10 flex items-center justify-center gap-2"
               >
+                <PenIcon size={18} />
                 Edit
               </button>
 
               <button
                 onClick={() => handleDeleteService(service._id)}
-                className="px-3 py-1.5 rounded-lg border border-red-500/20 text-red-400 hover:bg-red-500/10"
+                className="px-3 py-1.5 rounded-lg border border-red-500/20 text-red-400 hover:bg-red-500/10 flex justify-center items-center gap-2"
               >
+                <Trash2 color="rgba(248, 113, 113, 1)" size={18} />
                 Delete
               </button>
             </div>
@@ -141,9 +149,9 @@ const ServiceDetails = () => {
                 });
                 setIsBookingFormOpen(true);
               }}
-              className="bg-blue-600 shadow-[rgba(59,230,246,0.35)_0px_4px_16px_0px] w-[50%] py-3 rounded-lg text-sm"
+              className="bg-blue-600 shadow-[rgba(59,230,246,0.35)_0px_4px_16px_0px] w-[50%] py-3 rounded-lg text-sm flex justify-center items-center gap-2"
             >
-              Book this Service
+              <Book size={18} /> Book this Service
             </button>
           </div>
         ) : (

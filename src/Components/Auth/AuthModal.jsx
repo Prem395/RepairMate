@@ -19,7 +19,6 @@ const AuthModal = ({ isOpen, onClose }) => {
         onClick={(e) => e.stopPropagation()}
       >
         <button
-        
           type="button"
           onClick={onClose}
           className="absolute right-5 top-5 rounded-full border border-white/10 bg-white/5 p-2 text-white transition hover:bg-white/10"
@@ -32,8 +31,10 @@ const AuthModal = ({ isOpen, onClose }) => {
             <button
               type="button"
               onClick={() => setMode("signin")}
-              className={`rounded-full px-5 py-2 transition ${
-                mode === "signin" ? "bg-blue-600 text-white" : "text-slate-300"
+              className={`rounded-full px-5 py-2 transition-all ${
+                mode === "signin"
+                  ? "bg-sky-600 shadow-[rgba(59,230,246,0.35)_0px_4px_16px_0px] text-white"
+                  : "text-slate-300"
               }`}
             >
               Sign In
@@ -42,8 +43,10 @@ const AuthModal = ({ isOpen, onClose }) => {
             <button
               type="button"
               onClick={() => setMode("signup")}
-              className={`rounded-full px-5 py-2 transition ${
-                mode === "signup" ? "bg-blue-600 text-white" : "text-slate-300"
+              className={`rounded-full px-5 py-2 transition-all ${
+                mode === "signup"
+                  ? "bg-sky-600 shadow-[rgba(59,230,246,0.35)_0px_4px_16px_0px]  text-white"
+                  : "text-slate-300"
               }`}
             >
               Sign Up
@@ -61,7 +64,11 @@ const AuthModal = ({ isOpen, onClose }) => {
           </p>
 
           <div className="mt-4">
-            {mode === "signin" ? <LoginForm onClose={onClose} /> : <SignupForm setMode={setMode} />}
+            {mode === "signin" ? (
+              <LoginForm onClose={onClose} />
+            ) : (
+              <SignupForm setMode={setMode} />
+            )}
           </div>
 
           <p className="mt-3 text-center text-sm text-slate-400">

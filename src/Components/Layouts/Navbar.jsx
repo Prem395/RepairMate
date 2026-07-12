@@ -5,8 +5,10 @@ import { NavLink, useNavigate } from "react-router-dom";
 import NavbarMobile from "./NavbarMobile";
 import AuthModal from "../Auth/AuthModal";
 import { useAuth } from "../../context/AuthContext";
+
 import {
   ChevronDown,
+  ShieldCheck,
   ChevronUp,
   LogInIcon,
   LogOut,
@@ -142,65 +144,66 @@ const Navbar = () => {
                 </div>
 
                 {bookingModal && (
-                  <div className="absolute right-0 top-[72px] w-64 overflow-hidden rounded-3xl border border-white/10 bg-[#13192d]/95 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
+                  <div className="absolute right-0 top-[72px] min-w-[280px] overflow-hidden rounded-3xl border border-white/10 bg-[#13192d]/95 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
                     <div className="border-b border-white/10 px-5 py-4">
-                      <h3 className="font-semibold text-white">
-                        {user.firstName} {user.lastName}
-                      </h3>
+                      <div className="flex justify-between items-center">
+                        <h3 className="font-semibold text-white capitalize">
+                          {user.firstName} {user.lastName}
+                        </h3>
+                        <span
+                          className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-semibold ${
+                            user.role === "admin"
+                              ? "border-cyan-400/30 bg-cyan-400/10 text-cyan-300"
+                              : "border-slate-400/20 bg-slate-400/10 text-slate-300"
+                          }`}
+                        >
+                          {user.role === "admin" && <ShieldCheck className="mb-[2px]" size={14} />}
+                          {user.role === "admin" ? "Admin" : "User"}
+                        </span>
+                      </div>
 
                       <p className="mt-1 truncate text-xs text-slate-400">
                         {user.email}
                       </p>
                     </div>
-                    <div className="p-2">
-                      <button
-                        onClick={() => {
-                          navigate("/my-profile");
-                        }}
-                        className="mt-1 flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm text-slate-300 transition hover:bg-white/5"
-                      >
-                        <span className="flex items-center justify-center gap-2">
-                          <UserCircleIcon />
-                          My Profile
-                        </span>
-                      </button>
+                    <div className="p-2 ">
                       {user.role === "admin" ? (
-                        <div>
-                          <button
-                            onClick={() => {
-                              setbookingModal(false);
-                              navigate("/create-service");
-                            }}
-                            className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm text-slate-200 transition hover:bg-white/5"
+                        <div className="space-y-1">
+                          <NavLink
+                            onClick={() => setbookingModal(false)}
+                            to={"/create-service"}
+                            className={({ isActive }) =>
+                              `flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm text-slate-200 transition hover:bg-white/5 ${isActive ? "bg-white/5" : ""}`
+                            }
                           >
                             <PenLine />
                             <span>Create Service</span>
-                          </button>
+                          </NavLink>
 
-                          <button
-                            onClick={() => {
-                              setbookingModal(false);
-                              navigate("/all-bookings");
-                            }}
-                            className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm text-slate-200 transition hover:bg-white/5"
+                          <NavLink
+                            onClick={() => setbookingModal(false)}
+                            to={"/all-bookings"}
+                            className={({ isActive }) =>
+                              `flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm text-slate-200 transition hover:bg-white/5 ${isActive ? "bg-white/5" : ""}`
+                            }
                           >
                             <FcBarChart size={20} />
                             <span>Dashboard</span>
-                          </button>
+                          </NavLink>
                         </div>
                       ) : (
-                        <button
-                          onClick={() => {
-                            setbookingModal(false);
-                            navigate("/my-bookings");
-                          }}
-                          className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm text-slate-200 transition hover:bg-white/5"
+                        <NavLink
+                          onClick={() => setbookingModal(false)}
+                          to={"/my-bookings"}
+                          className={({ isActive }) =>
+                            `flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm text-slate-200 transition hover:bg-white/5 ${isActive ? "bg-white/5" : ""}`
+                          }
                         >
                           <span className="flex items-center justify-center gap-2">
                             <SquarePen className="" />
                             My Bookings
                           </span>
-                        </button>
+                        </NavLink>
                       )}
 
                       <button
@@ -221,9 +224,9 @@ const Navbar = () => {
                 <button
                   type="button"
                   onClick={openAuthModal}
-                  className="rounded-full border border-white/10 bg-white/5 px-6 py-2.5 text-sm font-normal text-white transition hover:bg-blue-300/20"
+                  className="rounded-full border border-white/10 bg-white/5 px-6 py-2.5 text-sm font-normal text-white transition hover:bg-blue-300/20 flex justify-center items-center gap-2"
                 >
-                  Sign In
+                 <LogInIcon size={18}/> Sign In
                 </button>
               </div>
             )}
